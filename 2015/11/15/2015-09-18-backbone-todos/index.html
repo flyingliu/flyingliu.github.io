@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="backbone," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="这个例子发现原来太经典了，增删改查都有了。 对照经典的实例代码，做下笔记。 demo地址 便利贴 backbone中的listenTo与on的区别使用情景区别 listenTo用于监听自身已外的对象 on用于监听自身 listenTo和on中的回调函数里的this的区别 listener.listenTo(object, &amp;apos;eventName&amp;apos;, function(){">
+<meta name="keywords" content="backbone">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Backbone例子todos">
+<meta property="og:url" content="http://flyingliu.github.io/2015/11/15/2015-09-18-backbone-todos/index.html">
+<meta property="og:site_name" content="如是我闻">
+<meta property="og:description" content="这个例子发现原来太经典了，增删改查都有了。 对照经典的实例代码，做下笔记。 demo地址 便利贴 backbone中的listenTo与on的区别使用情景区别 listenTo用于监听自身已外的对象 on用于监听自身 listenTo和on中的回调函数里的this的区别 listener.listenTo(object, &amp;apos;eventName&amp;apos;, function(){">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-29T00:12:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Backbone例子todos">
+<meta name="twitter:description" content="这个例子发现原来太经典了，增删改查都有了。 对照经典的实例代码，做下笔记。 demo地址 便利贴 backbone中的listenTo与on的区别使用情景区别 listenTo用于监听自身已外的对象 on用于监听自身 listenTo和on中的回调函数里的this的区别 listener.listenTo(object, &amp;apos;eventName&amp;apos;, function(){">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://flyingliu.github.io/2015/11/15/2015-09-18-backbone-todos/"/>
+
+
+
+
+
+  <title>Backbone例子todos | 如是我闻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">如是我闻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">色即是空，空即是色</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://flyingliu.github.io/2015/11/15/2015-09-18-backbone-todos/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="飞来小侠">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="如是我闻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Backbone例子todos</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-15T16:37:02+08:00">
+                2015-11-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/11/15/2015-09-18-backbone-todos/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/11/15/2015-09-18-backbone-todos/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这个例子发现原来太经典了，增删改查都有了。</p>
+<p>对照经典的实例代码，做下笔记。</p>
+<p><a href="/src/demos/todos.html">demo地址</a></p>
+<p><a href="/src/demos/todoa.html">便利贴</a></p>
+<h1 id="backbone中的listenTo与on的区别"><a href="#backbone中的listenTo与on的区别" class="headerlink" title="backbone中的listenTo与on的区别"></a>backbone中的listenTo与on的区别</h1><p><strong>使用情景区别</strong></p>
+<p>listenTo用于监听自身已外的对象</p>
+<p>on用于监听自身</p>
+<p>listenTo和on中的回调函数里的this的区别</p>
+<pre><code>listener.listenTo(object, &apos;eventName&apos;, function(){
+    //此处的this指向listener
+})
+object.on(&apos;eventName&apos;, function(){
+    //此处的this指向object
+})
+object.on(&apos;eventName&apos;, function(){
+    //此处的this指向context
+}, context)
+</code></pre><p><strong>触发顺序</strong></p>
+<p>当存在同名事件时,会按定义顺序执行,on和listenTo定义的事件会处在同一队列中</p>
+<p>若监听了all事件,则触发任意事件都将会在执行完相应回调后执行all事件的回调,  all事件的监听会传递一个参数,该参数为事件名字</p>
+<pre><code>var a = {
+        type: &quot;I&apos;m listening&quot;
+    },
+    b = {
+        type: &quot;I&apos;m listened&quot;
+    };
+_.extend(a, Backbone.Events);
+_.extend(b, Backbone.Events);
+b.on(&apos;onNoContext&apos;, function() {
+    console.log(&apos;trigger onNoContext&apos;);
+    console.log(this.type);
+});
+b.on(&apos;onContext&apos;, function() {
+    console.log(&apos;trigger onContext&apos;);
+    console.log(this.type);
+}, a);
+a.listenTo(b, &apos;listened&apos;, function() {
+    console.log(&apos;trigger listened&apos;);
+    console.log(this.type);
+});
+b.on(&apos;all&apos;, function() {
+    console.log(&apos;trigger on all&apos;);
+});
+a.listenTo(b, &apos;all&apos;, function() {
+    console.log(&apos;trigger listen all&apos;);
+});
+console.log(&apos;###b.trigger(&quot;all&quot;)###&apos;);
+b.trigger(&apos;all&apos;);
+console.log(&apos;###b.trigger(&quot;onNoContext&quot;)###&apos;);
+b.trigger(&apos;onNoContext&apos;);
+console.log(&apos;###b.trigger(&quot;onContext&quot;)###&apos;);
+b.trigger(&apos;onContext&apos;);
+console.log(&apos;###b.trigger(&quot;listened&quot;)###&apos;);
+b.trigger(&apos;listened&apos;);
+</code></pre><p>运行结果:</p>
+<pre><code>###b.trigger(&quot;all&quot;)###
+trigger on all
+trigger listen all
+trigger on all
+trigger listen all
+###b.trigger(&quot;onNoContext&quot;)###
+trigger onNoContext
+I&apos;m listened
+trigger on all
+trigger listen all
+###b.trigger(&quot;onContext&quot;)###
+trigger onContext
+I&apos;m listening
+trigger on all
+trigger listen all
+###b.trigger(&quot;listened&quot;)###
+trigger listened18 I&apos;m listening
+rigger on all
+trigger listen all
+</code></pre><hr>
+<h1 id="Backbone-js-event-bind-新功能-listenTo-and-stopListening"><a href="#Backbone-js-event-bind-新功能-listenTo-and-stopListening" class="headerlink" title="Backbone.js event bind 新功能 listenTo and stopListening"></a>Backbone.js event bind 新功能 listenTo and stopListening</h1><p>以前在 Backbone View 寫法都是像底下這樣</p>
+<pre><code>initialize: function() {
+    if (this.model) {
+        this.model.on(&quot;change&quot;, this.render, this);
+    }
+},
+
+render: function () {
+}
+</code></pre><p>上面我們可以看到當 model 有任何改變時，就會 trigger render function，這是最簡單的寫法，當我們移除 View 的時候，此事件就會跟著消失，但是如果是 Reference 到其他 Object 物件方法，如底下 myObject.on(“some:event”, anotherObject.someHandler); 當 anotherObject 物件被移除時，這時 myObject 還是綁定事件在 anotherObject 上面，這就會出現 zombie objects in JavaScript apps，當然這是有解法的，我們只需要在移除 anotherObject 之前呼叫底下程式碼:  myObject.off(“some:event”, anotherObject.someHandler); 透過上面解法，我們可以將 Backbone.js View 寫法改成底下:</p>
+<pre><code>Backbone.View.extend({
+    initialize: function(){
+        this.model.on(&quot;change:foo&quot;, this.doStuff, this);
+    },
+
+    doStuff: function(foo){
+        // do stuff in response to &quot;foo&quot; changing
+    },
+
+    remove: function(){
+        this.model.off(&quot;change:foo&quot;, this.doStuff, this);
+        // call the base type&apos;s method, since we are overriding it
+        Backbone.View.prototype.remove.call(this);
+    }
+})
+</code></pre><p>將 Backbone.js View Remove 改寫如下</p>
+<pre><code>remove: function(){
+    this.model.off(&quot;change:foo&quot;, this.doStuff, this);
+
+    // call the base type&apos;s method, since we are overriding it
+    Backbone.View.prototype.remove.call(this);
+}
+</code></pre><p>這樣就可以解決僵屍事件，但是如果有十個事件，那在 remove 裏面就會寫的很雜，所以在 0.9.9 版本出現 listenTo 和 stopListening 來解決此問題。程式碼改成如下</p>
+<pre><code>Backbone.View.extend({
+    initialize: function(){
+        this.listenTo(this.model, &quot;change:foo&quot;, this.doStuff);
+    },
+
+    doStuff: function(foo){
+        // do stuff in response to &quot;foo&quot; changing
+    }
+
+    // we don&apos;t need this. the default `remove` method calls `stopListening` for us
+    // remove: function(){
+        // this.stopListening();
+        // ...
+    //}
+})
+</code></pre><p>注意四大要點</p>
+<ol>
+<li><p>在 Backbone.View 裡面改用 listenTo 寫法</p>
+</li>
+<li><p>將 this.model 傳入 listenTo function</p>
+</li>
+<li><p>不用傳入最後一個參數 this 當作 context 變數</p>
+</li>
+<li><p>不需要再 override Backbone.View 的 remove function 了，因為在程式碼裏面就會自動呼叫 this.stopListening() 所以以後不要在寫 this.model.on 了，</p>
+</li>
+</ol>
+<p>請全面改寫成 this.listenTo(this.model, ..) 寫法。</p>
+<hr>
+<p>事件模块Backbone.Events在Backbone中占有十分重要的位置，其他模块Model，Collection，View所有事件模块都依赖它。通过继承Events的方法来实现事件的管理，可以说，它是Backbone的核心组成部分。</p>
+<p>此外，事件模块的所有方法都挂在了全局的Backbone上，如果你的代码中需要用到自定义事件(实现观察者模式)，可以直接使用它。</p>
+<p>一、Events API</p>
+<p>1.0之前只提供了三个基本方法 on/once/off/trigger，1.0开始增加了几个实用方法 listenTo/listenToOnce/stopListening。</p>
+<p>以下是各个方法的意义</p>
+<p>on 添加自定义事件<br>off 删除自定义事件<br>trigger 派发自定义事件<br>once 添加只执行一次的自定义事件 （内部依赖于_.once）<br>listenTo 添加一个观察对象<br>listenToOnce 添加一个仅执行一次的观察对象<br>stopListening 删除添加的观察对象</p>
+<p>二、基本事件方法</p>
+<p>1.绑定on方法</p>
+<p>使用on方法可以给一个对象的自定义事件绑定触发该事件时执行的函数，当自定义的事件触发时，绑定的函数将会被执行。其调用格式如下：</p>
+<p>obj.on(eventName, function, [context])</p>
+<p>其中，参数Obj表示对象本身；eventName表示自定义事件的事件名；function表示当事件触发时被执行的函数；可选参数context表示上下文对象，用于对象级事件的监听，即当一个对象需要监听另一个对象的事件时，可以使用该参数。</p>
+<p>使用on方法不仅可以绑定用户的自定义事件，可以直接监听对象自带的一些事件，下面通过一些简单示例来演示具体使用过程。</p>
+<p>示例1：使用on方法监听默认事件</p>
+<pre><code>var Person = Backbone.Model.extend({
+  defaults : {
+    name : &quot;&quot;,
+    sex : &quot;&quot;
+  }
+});
+var man = new Person();
+man.on(&apos;change&apos;, function () {
+  console.log(&apos;对象的默认值发生了变化&apos;);
+});
+man.set(&apos;name&apos;, &apos;breezefeng&apos;);
+在上述代码中，首先定义一个名称为Person的数据模型类。在定义时，通过defaults参数设置两个名为“name” 和 “sex” 的默认数据项。然后，实例化一个名为man的模型类对象，并使用on方法向该对象绑定触发change事件时执行的函数，即只要对象的属性值发生变化，将会触发change事件。
+
+示例2：使用on方法监听属性事件
+
+var Person = Backbone.Model.extend({
+  defaults : {
+    name : &quot;&quot;,
+    sex : &quot;女&quot;
+  }
+});
+var man = new Person();
+man.on(&apos;change&apos;, function () {
+  console.log(&apos;对象的默认值发生了变化&apos;);
+});
+man.on(&apos;change:sex&apos;, function (model, value) {
+  console.log(&apos;你修改了性别属性值，最新值是：&apos; + value)
+});
+man.set(&apos;sex&apos;, &apos;男&apos;);
+</code></pre><p>在上述代码中，分别给man对象绑定了两个事件，一个是默认事件change，另一个是属性事件change:sex，即sex属性变化事件。在属性变化事件的回调函数中，通过回传的value参数获取最新修改后的属性值。</p>
+<p>示例3：使用on方法获取属性修改前的值</p>
+<p>在使用on方法绑定change和change属性事件时，还可以通过回调函数中的model对象获取属性修改前的所有值，如下所示：</p>
+<pre><code>model.previous(&apos;attrName&apos;)  //用于获取对象中某个属性的原有值
+
+model.previousAttributes()  //返回一个对象，保存上一个状态的所有属性的原有值
+
+var Person = Backbone.Model.extend({
+  defaults : {
+    name : &quot;&quot;,
+    sex : &quot;女&quot;,
+    age : 32,
+    score : 120
+  }
+});
+var man = new Person();
+man.on(&apos;change:score&apos;, function (model, value) {
+  var oldScore = model.previous(&apos;score&apos;);
+  if (value &gt; oldScore) {
+    console.log(&apos;你比上次进步了&apos; + (value - oldScore) + &apos;分&apos;);
+  } else if (value &lt; oldScore) {
+    console.log(&apos;你比上次落后了&apos; + (oldScore - value) + &apos;分&apos;);
+  } else {
+    console.log(&apos;你的成绩没有变化&apos;);
+  }
+});
+man.on(&apos;change:age&apos;, function (model, value) {
+  var objAttr = model.previousAttributes();
+  var oldAge = objAttr.age;
+  if (value &gt; oldAge) {
+    console.log(&apos;你又长大了&apos; + (value - oldAge) + &apos;岁&apos;);
+  } else if (value &lt; oldAge) {
+    console.log(&apos;你又年轻了&apos; + (oldAge - value) + &apos;岁&apos;);
+  } else {
+    console.log(&apos;你的年龄没有变化&apos;);
+  }
+});
+man.set({
+  age : &apos;36&apos;,
+  score : 200
+});
+</code></pre><p>在上述代码中，通过使用on方法分别绑定对象man的change:score 和 change:age两个属性事件。</p>
+<p>在第一个属性事件change:score 中，通过回调函数中model模型对象的previous方法，获取上一次保存的score属性值。</p>
+<p>在第二个属性事件change:age 中，通过回调函数中model模型对象的previousAttributes方法，获取上一次保存结果的对象，并将对象保存至变量objAttr中，再通过访问对象变量objAttr的方式获取上一次保存的age属性值。</p>
+<p>示例4：使用on方法绑定多个事件</p>
+<p>在Backbone中，除了使用on方法绑定单个对象的事件，还可以使用该方法同时绑定多个对象的事件。绑定的格式有两种，第一种为各个事件使用空格隔开，格式如下：</p>
+<pre><code>obj.on(&quot;eventName1 eventName2&quot;, function)
+</code></pre><p>其中，使用空格隔开的参数eventName1 和 eventName2 表示被绑定的多个事件名称，function表示所有被绑定事件都要执行的自定义函数。</p>
+<p>第一种绑定方式代码：</p>
+<pre><code>var Person = Backbone.Model.extend({
+  defaults : {
+    name : &quot;&quot;,
+    sex : &quot;女&quot;,
+    age : 32,
+    score : 120
+  }
+});
+var man = new Person();
+man.on(&apos;change:score change:age&apos;, function (model, value) {
+  var oldAge = model.previous(&apos;age&apos;);
+  var newAge = model.get(&apos;age&apos;);
+  if (oldAge != newAge) {
+    console.log(&apos;age原值:&apos; + oldAge + &apos;, 新值:&apos; + newAge);
+  }
+
+  var oldScore = model.previous(&apos;score&apos;);
+  var newScore = model.get(&apos;score&apos;);
+  if (oldScore != newScore) {
+    console.log(&apos;score原值:&apos; + oldScore + &apos;, 新值:&apos; + newScore);
+  }
+});
+
+man.set(&apos;age&apos;, 36);
+man.set(&apos;score&apos;, 200);
+</code></pre><p>在使用on方法绑定事件中，有两种格式可以绑定多个事件，除第一种使用空格之外，第二种方法为使用对象方式绑定多个事件，格式如下：</p>
+<pre><code>var objEvent = {
+    eventName1 : function1,
+    eventName2 : function2
+    ...
+};
+obj.on(objEvent);
+</code></pre><p>在上述代码中，首先定义一个哈希对象objEvent，并以key/value的方式向该对象批量添加各个事件名称和要执行的事件函数，然后通过使用on方法绑定哈希对象即可。</p>
+<p>接下来将第一种使用空格方式绑定多个事件的代码修改成使用哈希对象绑定多个事件功能，修改代码如下：</p>
+<pre><code>var Person = Backbone.Model.extend({
+  defaults : {
+    name : &quot;&quot;,
+    sex : &quot;女&quot;,
+    age : 32,
+    score : 120
+  }
+});
+var man = new Person();
+var objEvent = {
+  &apos;change:score&apos; : score_change,
+  &apos;change:age&apos; : age_change
+};
+man.on(objEvent);
+function score_change (model, value) {
+  var oldScore = model.previous(&apos;score&apos;);
+  var newScore = model.get(&apos;score&apos;);
+  if (oldScore != newScore) {
+    console.log(&apos;score原值:&apos; + oldScore + &apos;, 新值:&apos; + newScore);
+  }
+}
+function age_change (model, value) {
+  var oldAge = model.previous(&apos;age&apos;);
+  var newAge = model.get(&apos;age&apos;);
+  if (oldAge != newAge) {
+    console.log(&apos;age原值:&apos; + oldAge + &apos;, 新值:&apos; + newAge);
+  }
+}
+man.set({
+  age : 36,
+  score : 200
+});
+</code></pre><p>2.绑定一次 once方法</p>
+<p>在Backbone中，除使用on方法可以绑定对象的事件之外，还可以使用once完成对象事件的绑定，只不过once方法绑定的事件只执行一次，之后即使触发也不执行，其调用格式如下：</p>
+<pre><code>obj.once(eventName, function, [context])
+</code></pre><p>示例代码如下：</p>
+<pre><code>var Person = Backbone.Model.extend({
+  defaults : {
+    name : &quot;&quot;,
+    sex : &quot;女&quot;,
+    age : 32,
+    score : 120
+  }
+});
+var man = new Person();
+var intNum = 0;
+man.once(&apos;change&apos;, function () {
+  intNum++;
+  console.log(&apos;事件触发的次数为 : &apos; + intNum);  //1
+});
+man.set(&apos;age&apos;, 36);
+man.set(&apos;age&apos;, 37);
+</code></pre><p>最终intNum打印出1，说明绑定的事件函数只执行了一次。</p>
+<p>3.触发事件 trigger方法</p>
+<p>trigger也是Backbone事件API中的一个重要方法，它的功能是触发对象的某一个事件，其调用格式如下：</p>
+<pre><code>obj.trigger(eventName)
+</code></pre><p>使用trigger方法可以手动触发对象的任何事件，不仅是系统自带的系统事件，还可以是自定义事件。示例代码如下：</p>
+<pre><code>var Person = Backbone.Model.extend({
+  defaults : {
+    name : &quot;&quot;,
+    sex : &quot;女&quot;,
+    age : 32,
+    score : 120
+  }
+});
+var man = new Person();
+man.on(&apos;change_age_sex&apos;, function () {
+  console.log(&apos;你手动触发了一个自定义事件&apos;);
+});
+man.on(&apos;change:age&apos;, function (model, value) {
+  if (value != undefined) {
+    console.log(&apos;你修改后的年龄为 : &apos; + value);
+  } else {
+    console.log(&apos;你手动触发了一个年龄修改事件&apos;);
+  }
+});
+man.trigger(&apos;change_age_sex&apos;);
+man.trigger(&apos;change:age&apos;);
+man.set(&apos;age&apos;, 36);
+</code></pre><p>不难看出，trigger方法的功能就是手动执行对象绑定的事件，类似于自定义一个函数后，调用该事件名。因此，该方法就是执行事件，不论该事件是自定义的还是系统自带的。</p>
+<p>4.移出事件 off方法</p>
+<p>在Backbone中，与绑定事件的on方法相对的是移除事件的off方法，该方法的功能是移除对象中已绑定的某个、多个或全部的时间，其调用格式如下：</p>
+<pre><code>obj.off(eventName, function, [context])
+</code></pre><p>示例1：使用off方法移出对象的某个或多个绑定事件</p>
+<p>在Backbone中，如果要移除对象的某个绑定事件，可以调用对象的off方法，指定需要移除的事件名称；如果有多个事件名称，则用空格隔开。</p>
+<pre><code>var Person = Backbone.Model.extend({
+  defaults : {
+    name : &quot;&quot;,
+    sex : &quot;女&quot;,
+    age : 32,
+    score : 120
+  }
+});
+var man = new Person();
+var m = 0, n = 0;
+var callback_a = function () {
+  m++;
+  console.log(&apos;你执行事件的次数为：&apos; + m);
+};
+var callback_b = function () {
+  n++;
+  console.log(&apos;你执行事件的次数为：&apos; + n)
+};
+man.on(&apos;event_a&apos;, callback_a);
+man.on(&apos;event_b&apos;, callback_b);
+man.off(&apos;event_a&apos;);
+man.trigger(&apos;event_a event_b&apos;);
+man.off(&apos;event_a event_b&apos;);
+man.trigger(&apos;event_a event_b&apos;);
+</code></pre><p>示例2：使用off方法移除绑定事件的某个函数</p>
+<p>在Backbone中，不仅可以调用对象的off方法移除已绑定的一个或多个事件，还可以移除绑定事件执行的某个函数。</p>
+<pre><code>var Person = Backbone.Model.extend({
+  defaults : {
+    name : &quot;&quot;,
+    sex : &quot;女&quot;,
+    age : 32,
+    score : 120
+  }
+});
+var man = new Person();
+var m = 0, n = 0;
+var callback_a = function () {
+  m++;
+  console.log(&apos;你执行事件的次数为：&apos; + m);
+};
+var callback_b = function () {
+  n++;
+  console.log(&apos;你执行事件的次数为：&apos; + n)
+};
+man.on(&apos;event_a&apos;, callback_a);
+man.on(&apos;event_b&apos;, callback_b);
+man.off(&apos;event_a&apos;, callback_a);
+man.trigger(&apos;event_a event_b&apos;);
+man.off(&apos;event_b&apos;, callback_b);
+man.trigger(&apos;event_a event_b&apos;);
+</code></pre><p>示例3：使用off方法移除对象的全部绑定事件</p>
+<p>在Backbone中，对象的off方法除了可以移除某个或多个事件、事件执行函数外，还可以通过不带参数的方式移除全部已绑定的事件，其调用格式如下：</p>
+<pre><code>obj.off()
+
+var Person = Backbone.Model.extend({
+  defaults : {
+    name : &quot;&quot;,
+    sex : &quot;女&quot;,
+    age : 32,
+    score : 120
+  }
+});
+var man = new Person();
+var m = 0, n = 0;
+var callback_a = function () {
+  m++;
+  console.log(&apos;你执行事件的次数为：&apos; + m);
+};
+var callback_b = function () {
+  n++;
+  console.log(&apos;你执行事件的次数为：&apos; + n)
+};
+man.on(&apos;event_a&apos;, callback_a);
+man.on(&apos;event_b&apos;, callback_b);
+man.off();
+man.trigger(&apos;event_a event_b&apos;);
+</code></pre><p>三、新增事件方法</p>
+<p>1.监听事件 listenTo方法</p>
+<p>相对于对象的on方法而言，listenTo方法的监听效果更为突出，它是一个对象监听另一个对象的事件，如果被监听对象触发了被监听的事件，执行相应的回调函数或代码块。例如，view对象要监听model对象的change事件，如果model对象触发了change事件，则需要刷新当前view对象，即执行下列监听方法的代码：</p>
+<pre><code>view.listenTo(model, &apos;change&apos;, view.render)
+</code></pre><p>上面监听方法也等价于如下代码：</p>
+<pre><code>model.on(&apos;change&apos;, view.render, view)
+</code></pre><p>其中，第三个参数为上下文环境对象，此时它的值为view，即model对象在触发change事件时，关联view对象进行执行view.render动作。</p>
+<p>通过上述对listenTo方法的简单介绍，我们知道它是一个对象级别的事件监听方法，即在执行该方法时，必须要有两个对象，其调用格式如下：</p>
+<p>obj1.listenTo(obj2, eventName, function</p>
+<p>其中，参数obj1，obj2都为对象，参数eventName是obj2对象触发的事件名称，参数function为当obj2触发指定的eventName事件时，obj1所执行的自定义函数。</p>
+<pre><code>var Person = Backbone.Model.extend({
+  defaults : {
+    name : &quot;&quot;,
+    sex : &quot;女&quot;,
+    age : 32,
+    score : 120
+  }
+});
+var man = new Person();
+var obj = _.extend({}, Backbone.Events);
+obj.listenTo(man, &apos;change:age&apos;, function (model, value) {
+  var oldAge = model.previous(&apos;age&apos;);
+  var newAge = model.get(&apos;age&apos;);
+  if (oldAge != newAge) {
+    console.log(&apos;age原值:&apos; + oldAge + &apos;, 新值:&apos; + newAge);
+  }
+});
+man.set(&apos;age&apos;, 36);
+</code></pre><p>2.监听一次 listenToOnce方法</p>
+<p>在BackBone中listenTo方法 和 listenToOnce方法调用方式完全一致，唯一区别是前者是一个对象一直监听另一个对象事件的触发，而后者是仅监听一次。</p>
+<pre><code>var Person = Backbone.Model.extend({
+  defaults : {
+    name : &quot;&quot;,
+    sex : &quot;女&quot;,
+    age : 32,
+    score : 120
+  }
+});
+var man = new Person();
+var obj = _.extend({}, Backbone.Events);
+var intNum = 0;
+obj.listenToOnce(man, &apos;change:age&apos;, function (model, value) {
+  intNum++;
+  console.log(&apos;事件触发的次数为:&apos; + intNum);
+});
+man.set(&apos;age&apos;, 36);
+man.set(&apos;age&apos;, 37);
+</code></pre><p>3.停止监听 stopListening方法</p>
+<p>在Backbone中，与单个对象的off方法相同，对象级别的事件监听也有停止方法，即stopListening方法，其调用格式如下：</p>
+<pre><code>obj1.stopListening(obj2, eventName, function)
+
+var Person = Backbone.Model.extend({
+  defaults : {
+    name : &quot;&quot;,
+    sex : &quot;女&quot;,
+    age : 32,
+    score : 120
+  }
+});
+var man = new Person();
+var obj = _.extend({}, Backbone.Events);
+obj.listenTo(man, &apos;change:name&apos;, function (model, value) {
+  console.log(&apos;姓名修改后的值为:&apos; + value);
+});
+obj.listenTo(man, &apos;change:age&apos;, function (model, value) {
+  console.log(&apos;年龄修改后的值为:&apos; + value);
+});
+obj.listenTo(man, &apos;change:score&apos;, function (model, value) {
+  console.log(&apos;分数修改后的值为:&apos; + value);
+});
+//停止监听某一个事件
+obj.stopListening(man, &apos;change:name&apos;);
+man.set(&apos;name&apos;, &apos;张三&apos;);
+man.set(&apos;age&apos;, 35);
+man.set(&apos;score&apos;, 600);
+//停止监听两个事件
+obj.stopListening(man, &apos;change:name change:age&apos;);
+man.set(&apos;name&apos;, &apos;李四&apos;);
+man.set(&apos;age&apos;, 36);
+man.set(&apos;score&apos;, 601);
+//停止监听全部事件
+obj.stopListening();
+man.set(&apos;name&apos;, &apos;王五&apos;);
+man.set(&apos;age&apos;, 37);
+man.set(&apos;score&apos;, 602);
+</code></pre><p>以上就是Backbone.Events模块所有API的使用，欢迎留言讨论~</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/backbone/" rel="tag"># backbone</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/15/2015-09-12-event-demo/" rel="next" title="点击事件绑定Demo">
+                <i class="fa fa-chevron-left"></i> 点击事件绑定Demo
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/15/2015-09-08-jekyll-serve/" rel="prev" title="jekyll常用命令">
+                jekyll常用命令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="飞来小侠" />
+          <p class="site-author-name" itemprop="name">飞来小侠</p>
+           
+              <p class="site-description motion-element" itemprop="description">依法不依人，依义不依语。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/flyingliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5872146656" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/guolaiwan/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liu-fei-lai/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#backbone中的listenTo与on的区别"><span class="nav-number">1.</span> <span class="nav-text">backbone中的listenTo与on的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Backbone-js-event-bind-新功能-listenTo-and-stopListening"><span class="nav-number">2.</span> <span class="nav-text">Backbone.js event bind 新功能 listenTo and stopListening</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">飞来小侠</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Pisces
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://ananfo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://flyingliu.github.io/2015/11/15/2015-09-18-backbone-todos/';
+          this.page.identifier = '2015/11/15/2015-09-18-backbone-todos/';
+          this.page.title = 'Backbone例子todos';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ananfo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

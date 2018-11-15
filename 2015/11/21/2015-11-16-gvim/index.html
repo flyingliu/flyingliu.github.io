@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="编辑器," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="安装好gvim后可以进行简单设计，配置文件在安装目录下_vimrc： set nu!            &amp;quot;设置行号 colorscheme desert &amp;quot;设置配色方案 syntax on          &amp;quot;语法高亮 syntax enable set nobackup        &amp;quot;不生成备份文件 set showmatch       &amp;quot">
+<meta name="keywords" content="编辑器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gVim的使用">
+<meta property="og:url" content="http://flyingliu.github.io/2015/11/21/2015-11-16-gvim/index.html">
+<meta property="og:site_name" content="如是我闻">
+<meta property="og:description" content="安装好gvim后可以进行简单设计，配置文件在安装目录下_vimrc： set nu!            &amp;quot;设置行号 colorscheme desert &amp;quot;设置配色方案 syntax on          &amp;quot;语法高亮 syntax enable set nobackup        &amp;quot;不生成备份文件 set showmatch       &amp;quot">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-29T00:14:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="gVim的使用">
+<meta name="twitter:description" content="安装好gvim后可以进行简单设计，配置文件在安装目录下_vimrc： set nu!            &amp;quot;设置行号 colorscheme desert &amp;quot;设置配色方案 syntax on          &amp;quot;语法高亮 syntax enable set nobackup        &amp;quot;不生成备份文件 set showmatch       &amp;quot">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://flyingliu.github.io/2015/11/21/2015-11-16-gvim/"/>
+
+
+
+
+
+  <title>gVim的使用 | 如是我闻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">如是我闻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">色即是空，空即是色</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://flyingliu.github.io/2015/11/21/2015-11-16-gvim/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="飞来小侠">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="如是我闻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">gVim的使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-21T15:35:18+08:00">
+                2015-11-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/11/21/2015-11-16-gvim/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/11/21/2015-11-16-gvim/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>安装好gvim后可以进行简单设计，配置文件在安装目录下_vimrc：</p>
+<pre><code>set nu!            &quot;设置行号
+colorscheme desert &quot;设置配色方案
+syntax on          &quot;语法高亮
+syntax enable
+set nobackup        &quot;不生成备份文件
+set showmatch       &quot;设置匹配模式
+set smartindent     &quot;设置只能对齐
+set ai!             &quot;设置自动缩进
+set fileencodings=utf-8,gbk
+set ambiwidth=double      &quot;设置中文支持
+set guifont=consolas:h12  &quot;设置字体及大小
+</code></pre><h1 id="三种模式"><a href="#三种模式" class="headerlink" title="三种模式"></a>三种模式</h1><ol>
+<li><p>vi打开文件默认的命令模式。此时可以敲击命令进行编辑文件</p>
+<pre><code>vim 文件名 //打开一个文件，当文件不存在时创建文件
+vim +5 文件名 // 打开一个文件，光标定位到第五行。加号后面的数字为光标定位的行号。
+vim +/search // 打开一个文件，搜索“search&quot;,并定位到第一次出现的行。然后敲 n 可游离到下一次出现的地方
+vim 文件1 文件2  // 一次打开多个文件。 底行命令行 :n 可转到当前文件的下一个文件。相反 :N 返回到上一个文件。
+
+dd  // 删除光标所在行
+yy  // 复制光标所在行
+o   // 光标所在行下行插入一行并切换到输入模式
+p   // 光标所在行下行粘贴
+P   // 光标所在行上行粘贴
+</code></pre></li>
+</ol>
+<ol start="2">
+<li><p>文本编辑模式。当敲击字母  a  即可进入编辑模式</p>
+</li>
+<li><p>底行命令行模式。在命令模式下输入 ： 时，在底下输入命令行，此时命令不会立即执行，要回车才会执行。比如<code>:wq</code>为保存文件退出。</p>
+<pre><code>:w  //保存
+:q  //退出
+:!  //强制执行
+:ls //显示所有打开的文件
+:n  //下一个文件
+:15 //光标定位到哪一行
+:/xxx  //从光标处向下搜索xxx
+:?xxx  //从光标处向上搜索xxx
+</code></pre></li>
+</ol>
+<p>vi（vim）是上Linux非常常用的编辑器，很多Linux发行版都默认安装了vi(vim)。vi(vim)命令繁多但是如果使用灵活之后将会大大提高效率。vi是“visual interface”的缩写，vim是vi IMproved(增强版的vi)。在一般的系统管理维护中vi就够用，如果想使用代码加亮的话可以使用vim。</p>
+<p>vi有3个模式：插入模式、命令模式、低行模式</p>
+<pre><code>1）插入模式：在此模式下可以输入字符，按ESC将回到命令模式。
+2）命令模式：可以移动光标、删除字符等。
+3）低行模式：可以保存文件、退出vi、设置vi、查找等功能(低行模式也可以看作是命令模式里的)。
+</code></pre><p>进入vi的命令</p>
+<pre><code>vi filename :打开或新建文件，并将光标置于第一行首
+vi +n filename ：打开文件，并将光标置于第n行首
+vi + filename ：打开文件，并将光标置于最后一行首
+vi +/pattern filename：打开文件，并将光标置于第一个与pattern匹配的串处
+vi -r filename ：在上次正用vi编辑时发生系统崩溃，恢复filename
+vi -o/O filename1 filename2 ... ：打开多个文件，依次进行编辑
+</code></pre><p>vi 关闭文件</p>
+<pre><code>:w       //保存文件
+:w vpser.net //保存至vpser.net文件
+:q          //退出编辑器，如果文件已修改请使用下面的命令
+:q!        //退出编辑器，且不保存
+:wq         //退出编辑器，且保存文件
+</code></pre><p>移动光标类命令</p>
+<pre><code>h ：光标左移一个字符
+l ：光标右移一个字符
+space：光标右移一个字符
+Backspace：光标左移一个字符
+k或Ctrl+p：光标上移一行
+j或Ctrl+n ：光标下移一行
+Enter ：光标下移一行
+w或W ：光标右移一个字至字首
+b或B ：光标左移一个字至字首
+e或E ：光标右移一个字至字尾
+) ：光标移至句尾
+( ：光标移至句首
+}：光标移至段落开头
+{：光标移至段落结尾
+nG：光标移至第n行首
+n+：光标下移n行
+n-：光标上移n行
+n$：光标移至第n行尾
+H ：光标移至屏幕顶行
+M ：光标移至屏幕中间行
+L ：光标移至屏幕最后行
+0：（注意是数字零）光标移至当前行首
+$：光标移至当前行尾
+n+        //向下跳n行
+n-         //向上跳n行
+nG        //跳到行号为n的行
+G           //跳至文件的底部
+</code></pre><p>屏幕翻滚类命令</p>
+<pre><code>Ctrl+u：向文件首翻半屏
+Ctrl+d：向文件尾翻半屏
+Ctrl+f：向文件尾翻一屏
+Ctrl＋b；向文件首翻一屏
+nz：将第n行滚至屏幕顶部，不指定n时将当前行滚至屏幕顶部。
+</code></pre><p>插入文本类命令</p>
+<pre><code>i ：在光标前
+I ：在当前行首
+a：光标后
+A：在当前行尾
+o：在当前行之下新开一行
+O：在当前行之上新开一行
+r：替换当前字符
+R：替换当前字符及其后的字符，直至按ESC键
+s：从当前光标位置处开始，以输入的文本替代指定数目的字符
+S：删除指定数目的行，并以所输入文本代替之
+ncw或nCW：修改指定数目的字
+nCC：修改指定数目的行
+</code></pre><p>复制、粘贴</p>
+<pre><code>yy    //将当前行复制到缓存区，也可以用 &quot;ayy 复制，&quot;a 为缓冲区，a也可以替换为a到z的任意字母，可以完成多个复制任务。
+nyy   //将当前行向下n行复制到缓冲区，也可以用 &quot;anyy 复制，&quot;a 为缓冲区，a也可以替换为a到z的任意字母，可以完成多个复制任务。
+yw    //复制从光标开始到词尾的字符。
+nyw   //复制从光标开始的n个单词。
+y^      //复制从光标到行首的内容。  
+y$      //复制从光标到行尾的内容。
+p        //粘贴剪切板里的内容在光标后，如果使用了前面的自定义缓冲区，建议使用&quot;ap 进行粘贴。
+P        //粘贴剪切板里的内容在光标前，如果使用了前面的自定义缓冲区，建议使用&quot;aP 进行粘贴。
+</code></pre><p>文本替换</p>
+<pre><code>:s/old/new      //用new替换行中首次出现的old
+:s/old/new/g         //用new替换行中所有的old
+:n,m s/old/new/g     //用new替换从n到m行里所有的old
+:%s/old/new/g      //用new替换当前文件里所有的old
+</code></pre><p>简单替换表达式</p>
+<pre><code>:%s/four/4/g
+</code></pre><p>“%” 范围前缀表示在所有行中执行替换，最后的 “g” 标记表示替换行中的所有匹配点，如果仅仅对当前行进行操作，那么只要去掉%即可</p>
+<p>如果你有一个像 “thirtyfour” 这样的单词，上面的命令会出错。这种情况下，这个单词会被替换成”thirty4″。要解决这个问题，用 “&lt;”来指定匹配单词开头：</p>
+<pre><code>:%s/&lt;four/4/g
+</code></pre><p>显然，这样在处理 “fourty” 的时候还是会出错。用 “&gt;” 来解决这个问题：</p>
+<pre><code>:%s/&lt;four&gt;/4/g
+</code></pre><p>如果你在编码，你可能只想替换注释中的 “four”，而保留代码中的。由于这很难指定，可以在替换命令中加一个 “c” 标记，这样，Vim 会在每次替换前提示你：</p>
+<pre><code>:%s/&lt;four&gt;/4/gc
+</code></pre><p>单词精确匹配替换</p>
+<pre><code>sed -e &quot;s/\&lt;old\&gt;/new/g&quot;  file
+</code></pre><p>删除命令</p>
+<pre><code>ndw或ndW：删除光标处开始及其后的n-1个字
+do：删至行首
+d$：删至行尾
+ndd：删除当前行及其后n-1行
+x或X：删除一个字符，x删除光标后的，而X删除光标前的
+Ctrl+u：删除输入方式下所输入的文本
+x         //删除当前字符
+nx         //删除从光标开始的n个字符
+dd       //删除当前行
+ndd     //向下删除当前行在内的n行
+u        //撤销上一步操作
+U       //撤销对当前行的所有操作
+</code></pre><p>搜索及替换命令</p>
+<pre><code>/pattern：从光标开始处向文件尾搜索pattern
+?pattern：从光标开始处向文件首搜索pattern
+n：在同一方向重复上一次搜索命令
+N：在反方向上重复上一次搜索命令
+：s/p1/p2/g：将当前行中所有p1均用p2替代
+：n1,n2s/p1/p2/g：将第n1至n2行中所有p1均用p2替代
+：g/p1/s//p2/g：将文件中所有p1均用p2替换
+</code></pre><p>选项设置</p>
+<pre><code>all：列出所有选项设置情况
+term：设置终端类型
+ignorance：在搜索中忽略大小写
+list：显示制表位(Ctrl+I)和行尾标志（$)
+number：显示行号
+report：显示由面向行的命令修改过的数目
+terse：显示简短的警告信息
+warn：在转到别的文件时若没保存当前文件则显示NO write信息
+nomagic：允许在搜索模式中，使用前面不带“/”的特殊字符
+nowrapscan：禁止vi在搜索到达文件两端时，又从另一端开始
+mesg：允许vi显示其他用户用write写到自己终端上的信息
+</code></pre><p>最后行方式命令</p>
+<pre><code>：n1,n2 co n3：将n1行到n2行之间的内容拷贝到第n3行下
+：n1,n2 m n3：将n1行到n2行之间的内容移至到第n3行下
+：n1,n2 d ：将n1行到n2行之间的内容删除
+：w ：保存当前文件
+：e filename：打开文件filename进行编辑
+：x：保存当前文件并退出
+：q：退出vi
+：q!：不保存文件并退出vi
+：!command：执行shell命令command
+：n1,n2 w!command：将文件中n1行至n2行的内容作为command的输入并执行之，若不指定n1，n2，则表示将整个文件内容作为command的输入
+：r!command：将命令command的输出结果放到当前行        
+</code></pre><p>寄存器操作</p>
+<pre><code>“?nyy：将当前行及其下n行的内容保存到寄存器？中，其中?为一个字母，n为一个数字
+“?nyw：将当前行及其下n个字保存到寄存器？中，其中?为一个字母，n为一个数字
+“?nyl：将当前行及其下n个字符保存到寄存器？中，其中?为一个字母，n为一个数字
+“?p：取出寄存器？中的内容并将其放到光标位置处。这里？可以是一个字母，也可以是一个数字
+ndd：将当前行及其下共n行文本删除，并将所删内容放到1号删除寄存器中。
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编辑器/" rel="tag"># 编辑器</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/15/2015-09-29-study-object/" rel="next" title="深入学习JavaScript对象">
+                <i class="fa fa-chevron-left"></i> 深入学习JavaScript对象
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/28/2015-11-28-trigger/" rel="prev" title="trigger的使用场景">
+                trigger的使用场景 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="飞来小侠" />
+          <p class="site-author-name" itemprop="name">飞来小侠</p>
+           
+              <p class="site-description motion-element" itemprop="description">依法不依人，依义不依语。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/flyingliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5872146656" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/guolaiwan/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liu-fei-lai/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#三种模式"><span class="nav-number">1.</span> <span class="nav-text">三种模式</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">飞来小侠</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Pisces
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://ananfo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://flyingliu.github.io/2015/11/21/2015-11-16-gvim/';
+          this.page.identifier = '2015/11/21/2015-11-16-gvim/';
+          this.page.title = 'gVim的使用';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ananfo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

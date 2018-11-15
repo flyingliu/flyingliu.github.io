@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="backbone," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="这个例子是仿照todo去实现一些任务的。我想慢慢去扩展它，争取把backdone常用的概念能跑一遍。 实例 backbone中的创建视图 用el,id,tagName,className,attributes的区别&amp;lt;div title=&amp;quot;列表&amp;quot; style=&amp;quot;color:red&amp;quot; id=&amp;quot;list&amp;quot; class=&amp;quot;list">
+<meta name="keywords" content="backbone">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Backbone的学习[一]">
+<meta property="og:url" content="http://flyingliu.github.io/2015/11/15/2015-09-17-study-backbone/index.html">
+<meta property="og:site_name" content="如是我闻">
+<meta property="og:description" content="这个例子是仿照todo去实现一些任务的。我想慢慢去扩展它，争取把backdone常用的概念能跑一遍。 实例 backbone中的创建视图 用el,id,tagName,className,attributes的区别&amp;lt;div title=&amp;quot;列表&amp;quot; style=&amp;quot;color:red&amp;quot; id=&amp;quot;list&amp;quot; class=&amp;quot;list">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-29T00:12:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Backbone的学习[一]">
+<meta name="twitter:description" content="这个例子是仿照todo去实现一些任务的。我想慢慢去扩展它，争取把backdone常用的概念能跑一遍。 实例 backbone中的创建视图 用el,id,tagName,className,attributes的区别&amp;lt;div title=&amp;quot;列表&amp;quot; style=&amp;quot;color:red&amp;quot; id=&amp;quot;list&amp;quot; class=&amp;quot;list">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://flyingliu.github.io/2015/11/15/2015-09-17-study-backbone/"/>
+
+
+
+
+
+  <title>Backbone的学习[一] | 如是我闻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">如是我闻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">色即是空，空即是色</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://flyingliu.github.io/2015/11/15/2015-09-17-study-backbone/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="飞来小侠">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="如是我闻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Backbone的学习[一]</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-15T16:37:02+08:00">
+                2015-11-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/11/15/2015-09-17-study-backbone/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/11/15/2015-09-17-study-backbone/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这个例子是仿照todo去实现一些任务的。我想慢慢去扩展它，争取把backdone常用的概念能跑一遍。</p>
+<p><a href="/src/demos/study-backbone.html">实例</a></p>
+<p>backbone中的创建视图</p>
+<h1 id="用el-id-tagName-className-attributes的区别"><a href="#用el-id-tagName-className-attributes的区别" class="headerlink" title="用el,id,tagName,className,attributes的区别"></a>用el,id,tagName,className,attributes的区别</h1><pre><code>&lt;div title=&quot;列表&quot; style=&quot;color:red&quot; id=&quot;list&quot; class=&quot;listview&quot;&gt;&lt;/div&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    var ListView = Backbone.View.extend({
+        el : &apos;#list&apos;
+    });
+     var listview = new ListView();
+&lt;/script&gt;
+</code></pre><p><strong>当dom选择器已经存在时用 <code>el</code> 指定对应的DOM对象</strong></p>
+<p>在这个例子中，我们定义了一个ListView视图类，它继承自Backbone.View，我们通过new关键字实例化一个ListView对象。</p>
+<p>在定义ListView时，我们设置了el属性，它应该是一个字符串形式的DOM选择器，但视图对象在实例化时，会在内部通过这个选择器获取对应的DOM对象，并重新存放在el属性中。因此我们可以在视图的内部通过this.el来访问所关联的DOM对象。</p>
+<p>每个视图对象都会关联一个DOM对象，视图中所有操作都限定在这个DOM对象之内，这样做可以便于视图界面的控制（如渲染、隐藏和移除等），同时能提高查找视图内子元素的效率。</p>
+<p>上面的例子中，id为list的标签是我们事先准备好的，在定义ListView时可以直接通过#list选择器来引用它，但实际开发时这些DOM可能是动态生成的，至少在定义视图类时它们还不存在。此时，我们可以通过另一种方式来设置视图的DOM对象：</p>
+<p><strong>当dom选择器在定义视图类还不存在时用 <code>tagName</code> </strong></p>
+<pre><code>&lt;script type=&quot;text/javascript&quot;&gt;
+    var ListView = Backbone.View.extend({
+      tagName : &apos;div&apos;,
+      className : &apos;listview&apos;,
+       id : &apos;list&apos;,
+       attributes : {
+           title : &apos;列表&apos;,
+           style : &apos;color:red&apos;
+      },
+      render : function() {
+          this.el.innerHTML = &apos;Hello World!&apos;;
+           document.body.appendChild(this.el);
+       }
+    });
+    var listview = new ListView();
+    listview.render();
+&lt;/script&gt;
+</code></pre><p>运行这个例子，页面上输出了一段红色的文字：Hello World!。如果你通过Firebug等工具查看当前的DOM结构，你能看到body结束标签之前多了这样一段：</p>
+<pre><code>&lt;div title=&quot;列表&quot; style=&quot;color:red&quot; id=&quot;list&quot; class=&quot;listview&quot;&gt;Hello World!&lt;/div&gt;
+</code></pre><p>这段标签是视图对象在实例化时根据<code>tagName</code>、<code>className</code>、<code>id</code>和<code>attributes</code>属性自动创建的，结合我们的代码，你可以很清晰地看出：</p>
+<ul>
+<li><p>tagName表示新标签的名称（如果没有设置，则默为div标签）</p>
+</li>
+<li><p>className对应标签的class样式属性</p>
+</li>
+<li><p>id对应标签的id属性</p>
+</li>
+</ul>
+<p>这3个是最常见的HTML属性，你可以在定义视图类时直接设置它们，如果还需要设置更多的属性，可以通过attributes属性来定义。</p>
+<p>你可能注意到，我们还定义了一个render()方法，在创建ListView实例之后，我们调用该方法将新建的标签添加到页面尾部，否则它只会存储在el属性中，而不会被显示。</p>
+<p>上面介绍的两种创建方式，是在两种不同的场景中使用，分别是对已经存在的DOM创建视图，和创建视图时同时创建新的DOM，因此你不应该不会同时使用到它们。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/backbone/" rel="tag"># backbone</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/15/2015-09-22-gitcafe/" rel="next" title="用gitcafe托管个人站点">
+                <i class="fa fa-chevron-left"></i> 用gitcafe托管个人站点
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/15/2015-09-17-javascript-asi/" rel="prev" title="趣谈 JavaScript 中的 ASI (Automatic Semicolon Insertion)">
+                趣谈 JavaScript 中的 ASI (Automatic Semicolon Insertion) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="飞来小侠" />
+          <p class="site-author-name" itemprop="name">飞来小侠</p>
+           
+              <p class="site-description motion-element" itemprop="description">依法不依人，依义不依语。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/flyingliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5872146656" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/guolaiwan/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liu-fei-lai/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#用el-id-tagName-className-attributes的区别"><span class="nav-number">1.</span> <span class="nav-text">用el,id,tagName,className,attributes的区别</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">飞来小侠</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Pisces
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://ananfo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://flyingliu.github.io/2015/11/15/2015-09-17-study-backbone/';
+          this.page.identifier = '2015/11/15/2015-09-17-study-backbone/';
+          this.page.title = 'Backbone的学习[一]';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ananfo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

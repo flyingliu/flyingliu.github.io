@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="backbone," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="本文代码demo 随着JavaScript程序变得越来越复杂，往往需要一个团队协作开发，这时代码的模块化和组织规范就变得异常重要了。MVC模式就是代码组织的经典模式。backbone.js就是为前端开发提供MVC模式滴！ backebone.js官网介绍官方网站 ，中文手册可以看 这里。 官网上面明确指出Backbone.js依赖 Underscore.js ,中文手册看 这里 ，所以在使用bac">
+<meta name="keywords" content="backbone">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Backbone">
+<meta property="og:url" content="http://flyingliu.github.io/2015/11/15/2015-09-15-user-backbone/index.html">
+<meta property="og:site_name" content="如是我闻">
+<meta property="og:description" content="本文代码demo 随着JavaScript程序变得越来越复杂，往往需要一个团队协作开发，这时代码的模块化和组织规范就变得异常重要了。MVC模式就是代码组织的经典模式。backbone.js就是为前端开发提供MVC模式滴！ backebone.js官网介绍官方网站 ，中文手册可以看 这里。 官网上面明确指出Backbone.js依赖 Underscore.js ,中文手册看 这里 ，所以在使用bac">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-29T00:12:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Backbone">
+<meta name="twitter:description" content="本文代码demo 随着JavaScript程序变得越来越复杂，往往需要一个团队协作开发，这时代码的模块化和组织规范就变得异常重要了。MVC模式就是代码组织的经典模式。backbone.js就是为前端开发提供MVC模式滴！ backebone.js官网介绍官方网站 ，中文手册可以看 这里。 官网上面明确指出Backbone.js依赖 Underscore.js ,中文手册看 这里 ，所以在使用bac">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://flyingliu.github.io/2015/11/15/2015-09-15-user-backbone/"/>
+
+
+
+
+
+  <title>使用Backbone | 如是我闻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">如是我闻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">色即是空，空即是色</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://flyingliu.github.io/2015/11/15/2015-09-15-user-backbone/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="飞来小侠">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="如是我闻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用Backbone</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-15T16:37:02+08:00">
+                2015-11-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/11/15/2015-09-15-user-backbone/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/11/15/2015-09-15-user-backbone/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="/src/demos/use-backbone.html">本文代码demo</a></p>
+<p>随着JavaScript程序变得越来越复杂，往往需要一个团队协作开发，这时代码的模块化和组织规范就变得异常重要了。MVC模式就是代码组织的经典模式。backbone.js就是为前端开发提供MVC模式滴！</p>
+<p>backebone.js官网介绍<br><a href="http://backbonejs.org/" target="_blank" rel="external">官方网站</a> ，中文手册可以看 <a href="http://www.css88.com/doc/backbone/" target="_blank" rel="external">这里</a>。</p>
+<p>官网上面明确指出Backbone.js依赖 <a href="http://underscorejs.org/" target="_blank" rel="external">Underscore.js</a> ,中文手册看 <a href="http://learningcn.com/underscore/" target="_blank" rel="external">这里</a> ，所以在使用backbone.js的时候，必须引入underscore.js。官网也提供了 <a href="http://backbonejs.org/docs/backbone.html" target="_blank" rel="external">查看源码</a> 的地址，文档注释写的非常详细。另外在官网上面都会给出代码示例，在代码的右上角上，有一个运行的按钮，点击的运行就可以看到这段代码运行的结果啦。</p>
+<p>官网左侧菜单栏里面就是backbone.js的全部模块了</p>
+<p>Events 事件：backbone.js是事件驱动的，可以给对象绑定自定义事件</p>
+<p>Model 模型：MVC中的M，对数据的操作都在这里了</p>
+<p>Collection 集合：是Model的集合</p>
+<p>Router 路由：为客户端路由提供支持，并支持旧浏览器</p>
+<p>History 历史：处理hashchange或pushState</p>
+<p>Sync 同步：向服务器进行同步，默认同步方式调用的是jQuery.ajax，可以重写Sync修改为其他同步方式</p>
+<p>View 视图：含事件行为和渲染页面</p>
+<p>Utility 工具：为解决冲突提供工具</p>
+<p>F.A.O 问答：常见问答</p>
+<p>Examples 案例：backbone.js有很多案例，直接点击就可以查看了</p>
+<p>MVC</p>
+<ul>
+<li><p>（1）<strong>Model</strong>  Model表示数据层，也就是程序需要的数据源，通常使用JSON格式表示。</p>
+</li>
+<li><p>（2）<strong>View</strong>  View表示表现层，也就是用户界面，对于网页来说，就是用户看到的网页HTML代码。</p>
+</li>
+<li><p>（3）<strong>Controller</strong>  Controller表示控制层，用来对原始数据（Model）进行加工，传送到View。</p>
+</li>
+</ul>
+<p>由于网页编程不同于客户端编程，在MVC的基础上，JavaScript社区产生了各种变体框架MVP（Model-View-Presenter）、MVVM（Model-View-ViewModel）等等，有人就把所有这一类框架的各种模式统称为MV*。</p>
+<p>框架的优点在于合理组织代码、便于团队合作和未来的维护，缺点在于有一定的学习成本，且限制你只能采取它的写法。</p>
+<p>backbone.js主要内容介绍<br>Model.constructor</p>
+<pre><code>var tom = new Backbone.Model({&apos;name&apos;:&apos;tom&apos;});  // 创建学生tom
+var peter = new Backbone.Model({&apos;name&apos;:&apos;peter&apos;}); // 创建学生peter
+
+var students = new Backbone.Collection(); // tom和peter都是学生
+students.add( tom );    // 向Collection中添加学生
+students.add( peter );
+
+console.log( JSON.stringify(students) ); //[{&quot;name&quot;:&quot;tom&quot;},{&quot;name&quot;:&quot;peter&quot;}]
+</code></pre><p>通过new的方式创建了两个Model的实例；通过json对象的传参方式给Model的constuctor构造函数传递了name属性。</p>
+<p>通过new的方式创建了一个Collection实例；通过调用students的add方法，将tom和peter添加到集合中。</p>
+<p>通过 文档 可以看出，通过{‘name’:’tom’}这种方式给Model设置的属性，实际上会调用model.set()方法。</p>
+<p>Model.extend</p>
+<pre><code>var User = Backbone.Model.extend({
+sayHello : function(){  //实例方法
+  console.log(&quot;hello&quot;);
+    }
+},
+{
+sayWorld : function(){  //静态方法
+  console.log(&quot;world&quot;);
+    }
+});
+var tom = new User; // 创建一个用户
+tom.sayHello(); // 调用用户的实例方法
+User.sayWorld(); // 直接调用Model的静态方法
+</code></pre><p>通过extend扩展了Backbone.Model，第一个参数是实例对象中的属性，第二个可选的参数会直接注册到构造函数成为静态方法。这样即使没有实例化对象，也能调用Model中定义的方法</p>
+<pre><code>var User = Backbone.Model.extend({
+  defaults : {    // 默认属性，但是子类也会继承
+    &quot;name&quot;: &quot;tom&quot;
+  },
+  sayHello : function(){  // 父类的方法
+    console.log(&quot;hello&quot;);
+  }
+});
+var ChildUser = User.extend({   // ChildUser 继承自User
+  sayChild : function(){  // 子类的方法
+    console.log(&quot;child&quot;);
+  }
+});
+var child = new ChildUser;  // 创建ChildUser实例
+child.sayHello();    // 子类继承父类sayHello()方法
+child.sayChild();    // 子类自己的方法
+console.log(child.get(&quot;name&quot;));  // 子类继承父类属性
+</code></pre><p>extend会正确的设置原型链，所以可以通过extend实现继承。上面的代码就是创建父类User，然后子类ChildUser继承子父类。子类会继承父类的属性、方法</p>
+<p>Model.initialize</p>
+<pre><code>var User = Backbone.Model.extend({
+  defaults : {
+    name : &apos;tom&apos;  // 默认的名字
+  },
+  initialize : function(){  //当model创建的时候，调用
+    console.log(&quot;initialize&quot;);
+    this.on(&apos;change&apos;,function(){  // 当数据发生变化的时候触发
+      console.log(&quot;此时我的名字是：&quot;+this.get(&quot;name&quot;));
+    });
+  }
+});
+var tom = new User;
+tom.set(&apos;name&apos;,&apos;jack&apos;); // 修改模型的数据，会被change检测到
+</code></pre><p>如果指定了initialize方法，会在创建实例对象之后调用。当修改了模型数据，会触发自定义事件。</p>
+<pre><code>var User = Backbone.Model.extend({
+  defaults : {
+    name : &apos;tom&apos;,   // 默认的名字
+    age : 10
+  },
+  initialize : function(){  //当model创建的时候，调用
+    console.log(&quot;initialize&quot;);  
+    this.on(&apos;change:name&apos;,function(){   // 只检测name的变化
+      console.log(&quot;此时我的名字是：&quot;+this.get(&quot;name&quot;));
+    });
+  }
+});
+var tom = new User;
+tom.set(&apos;name&apos;,&apos;jack&apos;); // 修改模型的数据，会被change检测到
+tom.set(&apos;age&apos;,&apos;20&apos;);// 修改年龄不会被change检测
+</code></pre><p>如果只想检测某个属性的变化，可以通过添加命名空间的方式区别开事件。</p>
+<p>listenTo、View initialize</p>
+<pre><code>$(function(){
+  var User = Backbone.Model.extend({
+    defaults : {
+      name : &apos;tom&apos;
+    }
+  });
+  var View = Backbone.View.extend({
+    initialize : function(){
+      console.log(&quot;initialize&quot;);
+      this.listenTo( this.model , &apos;change&apos; , this.show );  // 当与这个view绑定的model数据发生变化的时候，调用show方法
+    },
+    show : function(model){ // 向页面中输出信息
+      $(&apos;body&apos;).append( &apos;&lt;div&gt;&apos;+ this.model.get(&apos;name&apos;)+ &apos;&lt;/br&gt;也可以通过参数调用&lt;/br&gt;&apos; + model.get(&apos;name&apos;) +&apos;&lt;/div&gt;&apos; );
+    }
+  });
+  var tom = new User;
+  var view = new View({model:tom});    // 创建view实体
+  setTimeout(function(){
+    tom.set(&apos;name&apos;,&apos;jack&apos;);  // 修改数据
+  }, 1000);    // 一秒后修改数据，触发show
+});
+</code></pre><p>listenTo允许一个对象监听另一个对象的事件，上面的代码就是让view监听model的change事件。</p>
+<p>sync、Model.save()</p>
+<pre><code>Backbone.sync = function(method, model) {
+  console.log(method + &quot;: &quot; + JSON.stringify(model));
+  model.set(&apos;id&apos;, 1);   // 模型的特殊属性
+};
+var Book = Backbone.Model.extend({
+  defaults:{
+    title: &quot;The Rough Riders&quot;,
+    author: &quot;Theodore Roosevelt&quot;
+  }
+});
+var b = new Book;
+b.save();    // create: {&quot;title&quot;:&quot;The Rough Riders&quot;,&quot;author&quot;:&quot;Theodore Roosevelt&quot;}
+b.save({author: &quot;Teddy&quot;}); // update: {&quot;title&quot;:&quot;The Rough Riders&quot;,&quot;author&quot;:&quot;Teddy&quot;,&quot;id&quot;:1}
+</code></pre><p>调用模型的save方法，就是委托Backbone.sync对数据进行持久化处理（保存到数据库），如果验证成功返回jqXHR，否则返回false。sync默认情况下是使用的是jQuery.ajax，可以通过重写sync来使用其他方式进行持久化处理如WebSockets,XML,或者Local Storage。上面的代码就是重写Backbone.sync的过程。第一次save的时候发送的create请求，第二次save的时候发送的是update请求。Backbone是如何区分第一次请求还是第二次请求的呢？是根据通过model.isNew这个方法进行判断的。如果模型没有id属性，就是表示模型是新模型可以通过下面的代码测试</p>
+<pre><code>Backbone.sync = function(method, model) {
+  console.log(method + &quot;: &quot; + JSON.stringify(model));
+  console.log(model.isNew());   // 此时不存在id属性，所以是true
+  model.set(&apos;id&apos;, 1);   // 模型的特殊属性
+  console.log(model.isNew()); // 此时存在id属性，所以是false
+};
+</code></pre><p>在 Model.id文档中指出，如果通过set设置了model的id，就会将这个id拷贝到模型上，作为model的直接属性。在下图中可以发现通过Model.set(‘id’,1)，给attributes中添加了id属性，也直接给model添加了id属性。</p>
+<p>但是相反的，如果通过model.id=1的方式直接给model添加id属性，是不会拷贝到attributes中的。如果只是给model直接添加了id，通过Model.isNew返回的一直都会是true。</p>
+<pre><code>Backbone.sync = function(method, model) {
+  console.log(method + &quot;: &quot; + JSON.stringify(model));
+  console.log(model.isNew());   // 返回true
+  model.id=1;   // 给model直接添加id属性
+  console.log(model.isNew()); // 返回true
+};
+</code></pre><p>View和Events</p>
+<pre><code>var BodyView = Backbone.View.extend({
+  el : $(&apos;body&apos;), // 如果没有指定el，el就会是个空div
+  events : {
+    &apos;click input&apos; : &apos;sayHello&apos;, // 点击input的时候调用sayHello方法
+    &apos;mouseover li&apos; : &apos;moveLi&apos;// 鼠标悬浮li标签的时候调用moveLi方法
+  },
+  sayHello : function(){
+    console.log(&quot;Hello&quot;);
+  },
+  moveLi : function(){
+    console.log(&quot;mouseover li&quot;);
+  }
+});
+var view = new BodyView;
+</code></pre><p>如果设置了tagName、className、id、attributes属性（为视图知道根元素），那么view.el就会被创建，都在view.el就是个空的div。Backbone.events可以写成对象的形式，给视图绑定一组自定义事件。</p>
+<p>template</p>
+<pre><code>var Name = Backbone.Model.extend({
+  defaults : {
+    name : &apos;tom&apos;
+  }
+});
+var NameView = Backbone.View.extend({
+  initialize : function(){
+    this.listenTo( this.model , &apos;change&apos; , this.showName );
+  },
+  showName : function(model){
+    // $(&apos;body&apos;).append( &quot;&lt;div&gt;&quot; + model.get(&quot;name&quot;) + &quot;&lt;/div&gt;&quot; );    // 不使用template的时候html代码与js写在一起
+    $(&apos;body&apos;).append( this.template(this.model.toJSON()) );
+    // 使用模版之后，html代码与js代码相分离
+  },
+  template: _.template($(&apos;#name&apos;).html())
+  // _.template中传入需要编译的模版
+  // 返回的结果就是编译后的html代码
+  // 最后在showName中调用，将编译后的html显示到body中
+});
+var name = new Name;
+var nameView = new NameView({model:name});
+name.set(&apos;name&apos;,&apos;jack&apos;);
+&lt;script type=&quot;text/template&quot; id=&quot;name&quot;&gt;
+  &lt;% for (var i=0;i&lt;5;i++) { %&gt;
+    &lt;div&gt;&lt;%= name %&gt;&lt;/div&gt;
+  &lt;% } %&gt;
+&lt;/script&gt;
+</code></pre><p>使用js模版不仅可以将html代码和js代码分离，提高可读性，也能提高开发效率。backbone.js使用的underscore.js中的template</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/backbone/" rel="tag"># backbone</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/15/2015-09-17-javascript-asi/" rel="next" title="趣谈 JavaScript 中的 ASI (Automatic Semicolon Insertion)">
+                <i class="fa fa-chevron-left"></i> 趣谈 JavaScript 中的 ASI (Automatic Semicolon Insertion)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/15/2015-09-17-js-douhao/" rel="prev" title="JS逗号运算符的用法详解">
+                JS逗号运算符的用法详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="飞来小侠" />
+          <p class="site-author-name" itemprop="name">飞来小侠</p>
+           
+              <p class="site-description motion-element" itemprop="description">依法不依人，依义不依语。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/flyingliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5872146656" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/guolaiwan/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liu-fei-lai/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">飞来小侠</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Pisces
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://ananfo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://flyingliu.github.io/2015/11/15/2015-09-15-user-backbone/';
+          this.page.identifier = '2015/11/15/2015-09-15-user-backbone/';
+          this.page.title = '使用Backbone';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ananfo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

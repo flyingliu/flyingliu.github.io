@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="javascript,bind," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="引言 前端之所以被称为前端，是因为它是整个 Web 技术栈中距离用户最近、直接与用户进行交互的一环。而网页界面与用户的交互通常是通过各种事件来达成的；在各种事件之中，点击事件 往往又是最常见、最通用的一种界面事件。 本文将介绍我在 “点击事件绑定” 这一场景下的进阶之路。 背景 我是一个前端小兵，我在一家互联网公司做做一些简单的业务开发。 某一天，我接到了一个需求，做一个抽奖功能。公司里的前辈们已">
+<meta name="keywords" content="javascript,bind">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端进阶之路：点击事件绑定">
+<meta property="og:url" content="http://flyingliu.github.io/2015/11/15/2015-09-11-event/index.html">
+<meta property="og:site_name" content="如是我闻">
+<meta property="og:description" content="引言 前端之所以被称为前端，是因为它是整个 Web 技术栈中距离用户最近、直接与用户进行交互的一环。而网页界面与用户的交互通常是通过各种事件来达成的；在各种事件之中，点击事件 往往又是最常见、最通用的一种界面事件。 本文将介绍我在 “点击事件绑定” 这一场景下的进阶之路。 背景 我是一个前端小兵，我在一家互联网公司做做一些简单的业务开发。 某一天，我接到了一个需求，做一个抽奖功能。公司里的前辈们已">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-29T00:11:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端进阶之路：点击事件绑定">
+<meta name="twitter:description" content="引言 前端之所以被称为前端，是因为它是整个 Web 技术栈中距离用户最近、直接与用户进行交互的一环。而网页界面与用户的交互通常是通过各种事件来达成的；在各种事件之中，点击事件 往往又是最常见、最通用的一种界面事件。 本文将介绍我在 “点击事件绑定” 这一场景下的进阶之路。 背景 我是一个前端小兵，我在一家互联网公司做做一些简单的业务开发。 某一天，我接到了一个需求，做一个抽奖功能。公司里的前辈们已">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://flyingliu.github.io/2015/11/15/2015-09-11-event/"/>
+
+
+
+
+
+  <title>前端进阶之路：点击事件绑定 | 如是我闻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">如是我闻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">色即是空，空即是色</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://flyingliu.github.io/2015/11/15/2015-09-11-event/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="飞来小侠">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="如是我闻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端进阶之路：点击事件绑定</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-15T16:37:02+08:00">
+                2015-11-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/11/15/2015-09-11-event/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/11/15/2015-09-11-event/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>引言</p>
+<p>前端之所以被称为前端，是因为它是整个 Web 技术栈中距离用户最近、直接与用户进行交互的一环。而网页界面与用户的交互通常是通过各种事件来达成的；在各种事件之中，点击事件 往往又是最常见、最通用的一种界面事件。</p>
+<p>本文将介绍我在 “点击事件绑定” 这一场景下的进阶之路。</p>
+<p>背景</p>
+<p>我是一个前端小兵，我在一家互联网公司做做一些简单的业务开发。</p>
+<p>某一天，我接到了一个需求，做一个抽奖功能。公司里的前辈们已经完成了业务逻辑，而且已经提供了业务功能的接口，只需要我制作页面并完成事件绑定即可。</p>
+<p>开动</p>
+<p>我写好了页面，页面中有一个 ID 为 lucky-draw 的按钮元素。接下来，我需要为它绑定点击事件。我是这样写的：</p>
+<pre><code>var btn = document.getElementById(&apos;lucky-draw&apos;)
+btn.onclick = function () {
+    BX.luckyDraw()
+}
+</code></pre><p>这其中 BX.luckyDraw() 就是前辈们提供的业务接口，执行它就可以运行后续的抽奖功能。</p>
+<p>我测试了一下，代码工作正常，于是很开心地准备上线。</p>
+<p>第一关</p>
+<p>然而前辈们告诉我，这些重要功能的按钮是需要加统计的。这也难不倒我，因为我很熟悉统计系统的 API。于是我修改了一下事件绑定的代码：</p>
+<pre><code>btn.onclick = function () {
+    BX.luckyDraw()
+    BX.track(&apos;lucky-draw&apos;)
+}
+</code></pre><p>这样做是有效的，但前辈们又告诉我，因为某些原因，统计代码和业务代码是分布在不同位置的，以上代码需要拆开。于是我尝试这样修改：</p>
+<pre><code>btn.onclick = function () {
+    BX.luckyDraw()
+}
+
+// other codes...
+
+btn.onclick = function () {
+    BX.track(&apos;lucky-draw&apos;)
+}
+</code></pre><p>结果发现点击按钮时的抽奖功能失效了。原来，使用 .onclick 这样的事件属性来绑定事件有一个非常大的缺点，重复赋值会覆盖旧值。也就是说，这种方式只能绑定最后一次赋值的事件处理函数。</p>
+<p>我硬着头皮去请教前辈，才知道原来这种方式早已经不推荐使用了，应该使用 DOM 标准的事件绑定 API 来处理（在旧版 IE 下有一些兼容性问题，这里不展开）。因此我的代码改成了这样：</p>
+<pre><code>btn.addEventListener(&apos;click&apos;, function () {
+    BX.luckyDraw()
+}, false)
+
+// other codes...
+
+btn.addEventListener(&apos;click&apos;, function () {
+    BX.track(&apos;lucky-draw&apos;)
+}, false)
+</code></pre><p>所有功能终于又正常了，我很开心地准备上线。</p>
+<p>第二关</p>
+<p>事实证明我还是太天真了，PM 是不会一次性把所有需求都告诉你的。原来，这个抽奖功能还需要做 A/B 测试，也就是说，只有一半的用户会看到这个抽奖功能。</p>
+<p>这意味着用户的页面上可能根本没有 btn 这个元素，那么 btn.addEventListener(…) 这一句直接就抛错了。因此，在为按钮绑定事件处理函数之前，我不得不先判断一下：</p>
+<pre><code>if (btn) {
+    btn.addEventListener(&apos;click&apos;, function () {
+        BX.luckyDraw()
+    }, false)
+}
+
+// other codes...
+
+if (btn) {
+    btn.addEventListener(&apos;click&apos;, function () {
+        BX.track(&apos;lucky-draw&apos;)
+    }, false)
+}
+</code></pre><p>虽然这样的代码在所有用户的页面上都可以正常工作，但这些预先判断看起来很蛋疼啊。我再次带着疑惑向前辈请教。前辈慈祥地看着我，说出了一句经典名言：</p>
+<p>傻瓜，为什么不用万能的 jQuery 呢？</p>
+<p>原来，神奇的 jQuery 允许我们忽略很多细节，比如这种没有取到元素的情况会被它默默地消化掉。而且 jQuery 的事件绑定方法也不存在兼容性问题，API 也比较好看。不错不错，不管网上的大神们怎么喷 jQuery，但它简直是我的救星啊！</p>
+<p>于是，我的代码变成了以下这样：</p>
+<pre><code>var $btn = $(&apos;#lucky-draw&apos;)
+$btn.on(&apos;click&apos;, function () {
+    BX.luckyDraw()
+})
+
+// other codes...
+
+$btn.on(&apos;click&apos;, function () {
+    BX.track(&apos;lucky-draw&apos;)
+})
+</code></pre><p>我的代码看起来像那么回事了，我很开心地准备上线。</p>
+<p>第三关</p>
+<p>当然，我的故事不会这么快结束。要知道，对一个有追求的前端团队来说，不断提升用户体验是永恒的目标。比如，我们网站使用了一些方法来提升页面加载性能，部分页面内容并不是原本存在于页面中的，而是在用户需要时，由 JavaScript 动态生成的。</p>
+<p>拿这个抽奖功能来说，抽奖按钮存在于一个名为 “惊喜” 的 tab 中，而这个 tab 在初始状态下是没有内容的，只有当用户切换到这个 tab 时，才会由 JS 填充其内容。示意代码是这样的：</p>
+<pre><code>$(&apos;.tabs &gt; .surprise&apos;).on(&apos;click&apos;, function () {
+    var htmlSurpriseTab = [
+        &apos;&lt;div&gt;&apos;,
+            &apos;&lt;button id=&quot;lucky-draw&quot;&gt;Lucky Draw &lt;/button&apos;,
+        &apos; &lt;/div&gt;&apos;
+    ].join(&apos;&apos;)
+    $(&apos;.tab-panels &gt; .surprise&apos;).html(htmlSurpriseTab)
+
+    // BTN READY
+})
+</code></pre><p>这意味着，我写的事件绑定代码需要写在 // BTN READY 处。这种深层的耦合看起来很不理想，我需要想办法解决它。</p>
+<p>我想起来，我在阅读 jQuery 文档时看到有一种叫作 “事件委托” 的方法，可以在元素还未添加到页面之前就为它绑定事件。于是，我尝试这样来写：</p>
+<pre><code>$(document.body).on(&apos;click&apos;, &apos;#lucky-draw&apos;, function () {
+    BX.luckyDraw()
+})
+</code></pre><p>果然，我成功了！好事多磨啊，这个需求终于开心地上线了。</p>
+<p>经过进一步的研究，我了解到 “事件委托” 的本质是利用了事件冒泡的特性。把事件处理函数绑定到容器元素上，当容器内的元素触发事件时，就会冒泡到容器上。此时可以判断事件的源头是谁，再执行对应的事件处理函数。由于事件处理函数是绑定在容器元素上的，即使容器为空也没有关系；只要容器的内容添加进来，整个功能就是准备就绪的。</p>
+<p>虽然事件委托的原理听起来稍有些复杂，但由于 jQuery 对事件委托提供了完善的支持，我的代码并没有因此变得很复杂。</p>
+<p>多想一步</p>
+<p>经过这一番磨炼，我收获了很多经验值；同时，我也学会了更进一步去发现问题和思考问题。比如，在我们的网页，通常会有多个按钮，那为它们绑定事件的脚本代码可能就是这样的：</p>
+<pre><code>$body = $(document.body)
+$body.on(&apos;click&apos;, &apos;#lucky-draw&apos;, function () {
+    BX.luckyDraw()
+})
+
+$body.on(&apos;click&apos;, &apos;#some-btn&apos;, function () {
+    // do something...
+})
+$body.on(&apos;click&apos;, &apos;#another-btn&apos;, function () {
+    // do something else...
+})
+</code></pre><p>我隐隐觉得这样不对劲啊！虽然这些代码可以正常工作，但每多一个按钮就要为 body 元素多绑定一个事件处理函数；而且根据直觉，这样一段段长得差不多的代码是需要优化的。因此，如果我可以把这些类似的代码整合起来，那不论是在资源消耗方面，还是在代码组织方面，都是有益的。</p>
+<p>于是，我尝试把所有这些事件委托的代码合并为一次绑定。首先，为了实现合并，我需要为这些按钮找到共同点。很自然地，我让它们具有相同的 class：</p>
+<pre><code>&lt;button class=&quot;action&quot; id=&quot;lucky-draw&quot;&gt;Lucky Draw &lt;/button
+&lt;button class=&quot;action&quot; id=&quot;some-action&quot;&gt;Button &lt;/button
+&lt;a href=&quot;#&quot; class=&quot;action&quot; id=&quot;another-action&quot;&gt;Link &lt;/a&gt;
+&lt;a href=&quot;#&quot; class=&quot;action&quot; id=&quot;another-action-2&quot;&gt;Link &lt;/a&gt;
+</code></pre><p>然后，我试图通过一次事件委托来处理所有这些按钮：</p>
+<pre><code>$body.on(&apos;click&apos;, &apos;.action&apos;, function () {
+    // WHEN CLICK ANY &apos;.action&apos;, WE COME HERE.
+})
+</code></pre><p>很显然，所有具有 action 类名的元素被点击后都会触发上面这个事件处理函数。那么，接下来，我们在这里区分一下事件源头，并执行对应的任务：</p>
+<pre><code>$body.on(&apos;click&apos;, &apos;.action&apos;, function () {
+    switch (this.id) {
+        case &apos;lucky-draw&apos;:
+            BX.luckyDraw()
+            break
+        case &apos;some-btn&apos;:
+            // do something...
+            break
+        // ...
+    }
+})
+</code></pre><p>这样一来，所有分散的事件委托代码就被合并为一处了。在这个统一的事件处理函数中，我们使用 ID 来区分各个按钮。</p>
+<p>但 ID 有一些问题，由于同一页面上不能存在同名的元素，相信前端工程师们都对 ID 比较敏感，在日常开发中都尽量避免滥用。此外，如果多个按钮需要执行的任务相同，但它的 ID 又必须不同，则这些 ID 和它们对应的任务之间的对应关系就显得不够明确了。</p>
+<p>于是，我改用 HTML5 的自定义属性来标记各个按钮：</p>
+<pre><code>&lt;button class=&quot;action&quot; data-action=&quot;lucky-draw&quot;&gt;Lucky Draw &lt;/button&gt;
+&lt;button class=&quot;action&quot; data-action=&quot;some-action&quot;&gt;Button &lt;/button&gt;
+&lt;a href=&quot;#&quot; class=&quot;action&quot; data-action=&quot;another-action&quot;&gt;Link &lt;/a&gt;
+&lt;a href=&quot;#&quot; class=&quot;action&quot; data-action=&quot;another-action-2&quot;&gt;Link &lt;/a&gt;
+</code></pre><p>我在这里使用了 data-action 这个属性来标记各个按钮元素被点击时所要执行的动作。回过头看，由于各个按钮都使用了这个属性，它们已经具备了新的共同点，而 class 这个共同点就不必要了，于是我们的 HTML 代码可以简化一些：</p>
+<pre><code>&lt;button data-action=&quot;lucky-draw&quot;&gt;Lucky Draw &lt;/button&gt;
+&lt;button data-action=&quot;some-action&quot;&gt;Button &lt;/button&gt;
+&lt;a href=&quot;#&quot; data-action=&quot;another-action&quot;&gt;Link &lt;/a&gt;
+&lt;a href=&quot;#&quot; data-action=&quot;another-action-2&quot;&gt;Link &lt;/a&gt;
+</code></pre><p>同时 JS 代码也需要做相应调整：</p>
+<pre><code>$body.on(&apos;click&apos;, &apos;[data-action]&apos;, function () {
+    var actionName = $(this).data(&apos;action&apos;)
+    switch (actionName) {
+        case &apos;lucky-draw&apos;:
+            BX.luckyDraw()
+            break
+        case &apos;some-btn&apos;:
+            // do something...
+            break
+        // ...
+    }
+})
+</code></pre><p>我们的代码看起来已经挺不错了，但我已经停不下来了，还要继续改进。那个长长的 switch 语句看起来有点臃肿。通常优化 switch 的方法就是使用对象的键名和键值来组织这种对应关系。于是我继续改：</p>
+<pre><code>var actionList = {
+    &apos;lucky-draw&apos;: function () {
+        BX.luckyDraw()
+    },
+    &apos;some-btn&apos;: function () {
+        // do something...
+    }
+    // ...
+}
+
+$body.on(&apos;click&apos;, &apos;[data-action]&apos;, function () {
+    var actionName = $(this).data(&apos;action&apos;)
+    var action = actionList[actionName]
+
+    if ($.isFunction(action)) action()
+})
+</code></pre><p>经过这样的调整，我发现代码的嵌套变浅了，而且按钮们的标记和它们要做的事情也被组织成了 actionList 这个对象，看起来更清爽了。</p>
+<p>在这样的组织方式下，如果页面需要新增一个按钮，也很容易做扩展：</p>
+<pre><code>// HTML
+$body.append(&apos;a href=&quot;#&quot; data-action=&quot;more-action&quot;&gt;Link /a&gt;&apos;)
+
+// JS
+$.extend(actionList, {
+    &apos;more-action&apos;: function () {
+        // ...
+    }
+})
+</code></pre><p>到这里，这一整套实践终于像那么回事了！</p>
+<p>开源</p>
+<p>我自己用这一套方法参与了很多项目的开发，在处理事件绑定时，它节省了我很多的精力。我忽然意识到，它可能还适合更多的人、更多的项目。那不妨把它开源吧！</p>
+<p>于是我发布了 Action 这个项目。这个小巧的类库帮助开发者轻松随意地绑定点击事件，它使用 “动作” 这个概念来标记按钮和它被点击后要做的事情；它提供的 API 可以方便地定义一些动作：</p>
+<pre><code>action.add({
+    &apos;my-action&apos;: function () {
+        // ...
+    }
+})
+</code></pre><p>也可以手动触发已经定义的动作：</p>
+<pre><code>action.trigger(&apos;my-action&apos;)
+</code></pre><p>应用</p>
+<p>Action 这个类库已经被移动 Web UI 框架 CMUI 采用，作为全局的基础服务。CMUI 内部的各个 UI 组件都是基于 Action 的事件绑定机制来实现的。我们这里以对话框组件为例，来看看 Action 在 CMUI 中的应用（示意代码）：</p>
+<pre><code>CMUI.dialog = {
+    template: [
+        &apos;&lt;div class=&quot;dialog&quot;&gt;&apos;,
+            &apos;&lt;a href=&quot;#&quot; data-action=&quot;close-dialog&quot;&gt;× &lt;/a&gt;&apos;,
+            &apos;&lt;h2&gt;&lt;%= data.title %&gt; &lt;/h2&gt;&apos;,
+            &apos;&lt;div class=&quot;content&quot;&gt;&lt;%- data.html %&gt; &lt;/div&gt;&apos;,
+        &apos;&lt;/div&gt;&apos;
+    ].join(&apos;&apos;),
+
+    init: function () {
+        action.add({
+            &apos;close-dialog&apos;: function () {
+                $(this).closest(&apos;.dialog&apos;).hide()
+            }
+        })
+    },
+    open: function (config) {
+        var html = render(this.template, config)
+        $(html).appendTo(&apos;body&apos;).show()
+    }
+}
+
+CMUI.dialog.init()
+</code></pre><p>只要当 CMUI.dialog.init() 方法执行后，对话框组件就准备就绪了。我们在业务中直接调用 CMUI.dialog.open() 方法、传入构造对话框所需要的一些配置信息，这个对话框即可创建并打开。</p>
+<p>大家可以发现，在构造对话框的过程中，我们没有做任何事件绑定的工作，对话框的关闭按钮就自然具备了点击关闭功能！原因就在于关闭按钮</p>
+<pre><code>(&lt;a href=&quot;#&quot; data-action=&quot;close-dialog&quot;&gt;×&lt;/a&gt;)
+</code></pre><p>自身已经通过 data-action 属性声明了它被点击时所要执行的动作（’close-dialog’），而这个动作早已在组件初始化时（CMUI.dialog.init()）定义好了。</p>
+<p>结语</p>
+<p>希望本文对你有所启发，也希望 Action 能在实际开发中帮到你。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+            <a href="/tags/bind/" rel="tag"># bind</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/15/2015-10-20-js-yunsuanfu/" rel="next" title="js中运算符的优先级">
+                <i class="fa fa-chevron-left"></i> js中运算符的优先级
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/15/2015-10-19-settimeout/" rel="prev" title="从setTimeout说事件循环模型">
+                从setTimeout说事件循环模型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="飞来小侠" />
+          <p class="site-author-name" itemprop="name">飞来小侠</p>
+           
+              <p class="site-description motion-element" itemprop="description">依法不依人，依义不依语。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/flyingliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5872146656" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/guolaiwan/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liu-fei-lai/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">飞来小侠</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Pisces
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://ananfo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://flyingliu.github.io/2015/11/15/2015-09-11-event/';
+          this.page.identifier = '2015/11/15/2015-09-11-event/';
+          this.page.title = '前端进阶之路：点击事件绑定';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ananfo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

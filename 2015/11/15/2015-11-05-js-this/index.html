@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="javascript," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="JavaScript 是一种脚本语言，支持函数式编程、闭包、基于原型的继承等高级功能。JavaScript一开始看起来感觉会很容易入门，但是随着使用的深入，你会发现JavaScript其实很难掌握，有些基本概念让人匪夷所思。其中JavaScript 中的 this 关键字，就是一个比较容易混乱的概念，在不同的场景下，this会化身不同的对象。有一种观点认为，只有正确掌握了 JavaScript 中">
+<meta name="keywords" content="javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="再次理解js中的this">
+<meta property="og:url" content="http://flyingliu.github.io/2015/11/15/2015-11-05-js-this/index.html">
+<meta property="og:site_name" content="如是我闻">
+<meta property="og:description" content="JavaScript 是一种脚本语言，支持函数式编程、闭包、基于原型的继承等高级功能。JavaScript一开始看起来感觉会很容易入门，但是随着使用的深入，你会发现JavaScript其实很难掌握，有些基本概念让人匪夷所思。其中JavaScript 中的 this 关键字，就是一个比较容易混乱的概念，在不同的场景下，this会化身不同的对象。有一种观点认为，只有正确掌握了 JavaScript 中">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://flyingliu.github.io/src/images/this1.jpg">
+<meta property="og:image" content="http://flyingliu.github.io/src/images/this2.jpg">
+<meta property="og:image" content="http://flyingliu.github.io/src/images/this3.jpg">
+<meta property="og:updated_time" content="2017-08-29T00:14:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="再次理解js中的this">
+<meta name="twitter:description" content="JavaScript 是一种脚本语言，支持函数式编程、闭包、基于原型的继承等高级功能。JavaScript一开始看起来感觉会很容易入门，但是随着使用的深入，你会发现JavaScript其实很难掌握，有些基本概念让人匪夷所思。其中JavaScript 中的 this 关键字，就是一个比较容易混乱的概念，在不同的场景下，this会化身不同的对象。有一种观点认为，只有正确掌握了 JavaScript 中">
+<meta name="twitter:image" content="http://flyingliu.github.io/src/images/this1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://flyingliu.github.io/2015/11/15/2015-11-05-js-this/"/>
+
+
+
+
+
+  <title>再次理解js中的this | 如是我闻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">如是我闻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">色即是空，空即是色</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://flyingliu.github.io/2015/11/15/2015-11-05-js-this/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="飞来小侠">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="如是我闻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">再次理解js中的this</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-15T16:37:02+08:00">
+                2015-11-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/11/15/2015-11-05-js-this/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/11/15/2015-11-05-js-this/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>JavaScript 是一种脚本语言，支持函数式编程、闭包、基于原型的继承等高级功能。JavaScript一开始看起来感觉会很容易入门，但是随着使用的深入，你会发现JavaScript其实很难掌握，有些基本概念让人匪夷所思。其中JavaScript 中的 this 关键字，就是一个比较容易混乱的概念，在不同的场景下，this会化身不同的对象。有一种观点认为，只有正确掌握了 JavaScript 中的 this 关键字，才算是迈入了 JavaScript 这门语言的门槛。在主流的面向对象的语言中（例如Java,C#等)，this 含义是明确且具体的，即指向当前对象。一般在编译期绑定。而 JavaScript 中this 在运行期进行绑定的，这是JavaScript 中this 关键字具备多重含义的本质原因。</p>
+<p>JavaScript由于其在运行期进行绑定的特性，JavaScript 中的 this 可以是全局对象、当前对象或者任意对象，这完全取决于函数的调用方式。JavaScript 中函数的调用有以下几种方式：作为对象方法调用，作为函数调用，作为构造函数调用，和使用 apply 或 call 调用。常言道，字不如表，表不如图。为了让人更好的理解JavaScript this 到底指向什么？下面用一张图来进行解释：</p>
+<p><img src="/src/images/this1.jpg" alt=""></p>
+<p>上图我称之为”JavaScript this决策树”（非严格模式下）。下面通过例子来说明这个图如何来帮助我们对this进行判断：</p>
+<pre><code>var point = { 
+x : 0, 
+y : 0, 
+moveTo : function(x, y) { 
+     this.x = this.x + x; 
+     this.y = this.y + y;
+ console.log(this)
+     } 
+};
+
+//决策树解释：point.moveTo(1,1)函数不是new进行调用，进入否决策，
+//是用dot(.)进行调用，则指向.moveTo之前的调用对象，即point
+point.moveTo(1,1); //this 绑定到当前对象,即point对象
+</code></pre><p>point.moveTo（）函数在 “JavaScript this决策树”中进行判定的过程是这样的：</p>
+<p>1）point.moveTo函数调用是用new进行调用的么？这个明显不是，进入“否”分支，即函数是否用dot(.)进行调用？；</p>
+<p>2）point.moveTo函数是用dot(.)进行调用的，即进入“是”分支，即这里的this指向point.moveTo中.之前的对象point;</p>
+<p>图解point.moveTo函数的this指向什么的解析图如下图所示：</p>
+<p><img src="/src/images/this2.jpg" alt=""></p>
+<p>再举例，看下面的代码：</p>
+<pre><code>function func(x) { 
+ this.x = x; 
+ } 
+func(5); //this是全局对象window，x为全局变量
+//决策树解析：func()函数是用new进行调用的么？为否，进入func()函数是用dot进行调用的么？为否，则 this指向全局对象window
+x;//x =&gt; 5
+</code></pre><p>func（）函数在 “JavaScript this决策树”中进行判定的过程是这样的：</p>
+<p>1）func(5)函数调用是用new进行调用的么？这个明显不是，进入“否”分支，即函数是否用dot(.)进行调用？；</p>
+<p>2）func(5)函数不是用dot(.)进行调用的，即进入“否”分支，即这里的this指向全局变量window，那么this.x实际上就是window.x;</p>
+<p>图解func函数的this指向什么的解析图如下图所示：</p>
+<p><img src="/src/images/this3.jpg" alt=""></p>
+<p>针对作为函数直接调用的方式，下面看一个复杂的例子：</p>
+<pre><code>var point = { 
+ x : 0, 
+ y : 0, 
+ moveTo : function(x, y) { 
+     // 内部函数
+     var moveX = function(x) { 
+     this.x = x;//this 指向什么？window
+    }; 
+    // 内部函数
+    var moveY = function(y) { 
+    this.y = y;//this 指向什么？window
+    }; 
+    moveX(x); 
+    moveY(y); 
+    } 
+ }; 
+ point.moveTo(1,1); 
+ point.x; //=&gt;0 
+ point.y; //=&gt;0 
+ x; //=&gt;1 
+ y; //=&gt;1
+</code></pre><p>point.moveTo(1,1)函数实际内部调用的是moveX()和moveY()函数, moveX()函数内部的this在 “JavaScript this决策树”中进行判定的过程是这样的：</p>
+<p>1）moveX(1)函数调用是用new进行调用的么？这个明显不是，进入“否”分支，即函数是否用dot(.)进行调用？；</p>
+<p>2）moveX(1)函数不是用dot(.)进行调用的，即进入“否”分支，即这里的this指向全局变量window，那么this.x实际上就是window.x;</p>
+<p>下面看一下作为构造函数调用的例子：</p>
+<pre><code>function Point(x,y){ 
+    this.x = x; // this ?
+    this.y = y; // this ?
+ }
+var np=new Point(1,1);
+np.x;//1
+var p=Point(2,2);
+p.x;//error, p是一个空对象undefined
+window.x;//2
+</code></pre><p>Point(1,1)函数在var np=new Point(1,1)中的this在 “JavaScript this决策树”中进行判定的过程是这样的：</p>
+<p>1）var np=new Point(1,1)调用是用new进行调用的么？这个明显是，进入“是”分支，即this指向np；</p>
+<p>2）那么this.x=1，即np.x=1；</p>
+<p>Point(2,2)函数在var p= Point(2,2)中的this在 “JavaScript this决策树”中进行判定的过程是这样的：</p>
+<p>1）var p= Point(2,2)调用是用new进行调用的么？这个明显不是，进入“否”分支，即函数是否用dot(.)进行调用？；</p>
+<p>2）Point(2,2)函数不是用dot(.)进行调用的？判定为否，即进入“否”分支，即这里的this指向全局变量window，那么this.x实际上就是window.x;</p>
+<p>3）this.x=2即window.x=2.</p>
+<p>最后看一下函数用call 和apply进行调用的例子：</p>
+<pre><code>function Point(x, y){ 
+    this.x = x; 
+    this.y = y; 
+    this.moveTo = function(x, y){ 
+        this.x = x; 
+        this.y = y; 
+    } 
+ } 
+
+var p1 = new Point(0, 0); 
+var p2 = {x: 0, y: 0}; 
+p1.moveTo.apply(p2, [10, 10]);//apply实际上为p2.moveTo(10,10)
+p2.x//10
+</code></pre><p>p1.moveTo.apply(p2,[10,10])函数在 “JavaScript this决策树”中进行判定的过程是这样的：</p>
+<p>我们知道，apply 和 call 这两个方法异常强大，他们允许切换函数执行的上下文环境（context），即 this 绑定的对象。p1.moveTo.apply(p2,[10,10])实际上是p2.moveTo(10,10)。那么p2.moveTo(10,10)可解释为：</p>
+<p>1）p2.moveTo(10,10)函数调用是用new进行调用的么？这个明显不是，进入“否”分支，即函数是否用dot(.)进行调用？；</p>
+<p>2）p2.moveTo(10,10)函数是用dot(.)进行调用的，即进入“是”分支，即这里的this指向p2.moveTo(10,10)中.之前的对象p2,所以p2.x=10;</p>
+<p>关于JavaScript函数执行环境的过程，IBM developerworks文档库中的一段描述感觉很不错，摘抄如下：</p>
+<blockquote>
+<p>   “JavaScript 中的函数既可以被当作普通函数执行，也可以作为对象的方法执行，这是导致 this 含义如此丰富的主要原因。一个函数被执行时，会创建一个执行环境（ExecutionContext），函数的所有的行为均发生在此执行环境中，构建该执行环境时，JavaScript 首先会创建 arguments变量，其中包含调用函数时传入的参数。接下来创建作用域链。然后初始化变量，首先初始化函数的形参表，值为 arguments变量中对应的值，如果 arguments变量中没有对应值，则该形参初始化为 undefined。如果该函数中含有内部函数，则初始化这些内部函数。如果没有，继续初始化该函数内定义的局部变量，需要注意的是此时这些变量初始化为 undefined，其赋值操作在执行环境（ExecutionContext）创建成功后，函数执行时才会执行，这点对于我们理解 JavaScript 中的变量作用域非常重要，鉴于篇幅，我们先不在这里讨论这个话题。最后为 this变量赋值，如前所述，会根据函数调用方式的不同，赋给 this全局对象，当前对象等。至此函数的执行环境（ExecutionContext）创建成功，函数开始逐行执行，所需变量均从之前构建好的执行环境（ExecutionContext）中读取。”</p>
+</blockquote>
+<p>理解这段话对于理解Javascript函数将大有好处。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/15/2015-11-13-foreach/" rel="next" title="理解JavaScript里的 [].forEach.call() 写法.">
+                <i class="fa fa-chevron-left"></i> 理解JavaScript里的 [].forEach.call() 写法.
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/15/2015-10-20-js-yunsuanfu/" rel="prev" title="js中运算符的优先级">
+                js中运算符的优先级 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="飞来小侠" />
+          <p class="site-author-name" itemprop="name">飞来小侠</p>
+           
+              <p class="site-description motion-element" itemprop="description">依法不依人，依义不依语。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/flyingliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5872146656" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/guolaiwan/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liu-fei-lai/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">飞来小侠</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Pisces
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://ananfo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://flyingliu.github.io/2015/11/15/2015-11-05-js-this/';
+          this.page.identifier = '2015/11/15/2015-11-05-js-this/';
+          this.page.title = '再次理解js中的this';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ananfo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

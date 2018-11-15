@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="gulp," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Gulp 拥有大量的插件可供选用，为了缓解你的选择困难症，我直接推荐一些优秀插件给你吧： &amp;apos;use strict&amp;apos;;  var argv = require(&amp;apos;yargs&amp;apos;).argv var _ = require(&amp;apos;lodash&amp;apos;) var path = require(&amp;apos;path&amp;apos;) var runSequenc">
+<meta name="keywords" content="gulp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gulp的配置文件">
+<meta property="og:url" content="http://flyingliu.github.io/2016/09/28/2016-07-02-gulp-config/index.html">
+<meta property="og:site_name" content="如是我闻">
+<meta property="og:description" content="Gulp 拥有大量的插件可供选用，为了缓解你的选择困难症，我直接推荐一些优秀插件给你吧： &amp;apos;use strict&amp;apos;;  var argv = require(&amp;apos;yargs&amp;apos;).argv var _ = require(&amp;apos;lodash&amp;apos;) var path = require(&amp;apos;path&amp;apos;) var runSequenc">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-29T00:15:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="gulp的配置文件">
+<meta name="twitter:description" content="Gulp 拥有大量的插件可供选用，为了缓解你的选择困难症，我直接推荐一些优秀插件给你吧： &amp;apos;use strict&amp;apos;;  var argv = require(&amp;apos;yargs&amp;apos;).argv var _ = require(&amp;apos;lodash&amp;apos;) var path = require(&amp;apos;path&amp;apos;) var runSequenc">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://flyingliu.github.io/2016/09/28/2016-07-02-gulp-config/"/>
+
+
+
+
+
+  <title>gulp的配置文件 | 如是我闻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">如是我闻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">色即是空，空即是色</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://flyingliu.github.io/2016/09/28/2016-07-02-gulp-config/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="飞来小侠">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="如是我闻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">gulp的配置文件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-28T22:08:15+08:00">
+                2016-09-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/09/28/2016-07-02-gulp-config/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/09/28/2016-07-02-gulp-config/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Gulp 拥有大量的插件可供选用，为了缓解你的选择困难症，我直接推荐一些优秀插件给你吧：</p>
+<pre><code>&apos;use strict&apos;;
+
+var argv = require(&apos;yargs&apos;).argv
+var _ = require(&apos;lodash&apos;)
+var path = require(&apos;path&apos;)
+var runSequence = require(&apos;gulp-run-sequence&apos;); 
+var sass = require(&apos;gulp-sass&apos;);
+var minifyCss = require(&apos;gulp-minify-css&apos;);
+var rev = require(&apos;gulp-rev&apos;);
+var revCollector = require(&apos;gulp-rev-collector&apos;);
+var clean = require(&apos;gulp-clean&apos;);
+var gulpif = require(&apos;gulp-if&apos;);
+var del = require(&apos;del&apos;);
+var minimist = require(&apos;minimist&apos;);
+var gutil = require(&apos;gulp-util&apos;);
+
+var gulp = require(&apos;gulp&apos;);
+var concat = require(&apos;gulp-concat&apos;);
+var cssmin = require(&apos;gulp-cssmin&apos;);
+var jshint = require(&apos;gulp-jshint&apos;)
+var less = require(&apos;gulp-less&apos;)
+var plumber = require(&apos;gulp-plumber&apos;)
+var uglify = require(&apos;gulp-uglify&apos;)
+var markdown = require(&apos;gulp-markdown&apos;)
+var tpl2js = require(&apos;gulp-tpl2js&apos;)
+var cssmin = require(&apos;gulp-cssmin&apos;)
+var imagemin = require(&apos;gulp-imagemin&apos;)
+var cache = require(&apos;gulp-cache&apos;)
+var autoprefixer = require(&apos;gulp-autoprefixer&apos;)
+
+var config = require(&apos;./config&apos;).images
+var knownOptions = {
+  string: &apos;env&apos;,
+  default: { env: process.env.NODE_ENV || &apos;dev&apos; }
+};
+var options = minimist(process.argv.slice(2), knownOptions);
+var isDev = options.env === &quot;dev&quot;;
+
+
+
+gulp.task(&apos;help&apos;, function() {
+    console.log(&apos; gulp watch    文件监控打包&apos;);
+    console.log(&apos; gulp server   测试server&apos;);
+    console.log(&apos; gulp -p       生产环境（默认生产环境）&apos;);
+    console.log(&apos; gulp -d       开发环境&apos;);
+});
+
+
+// 图片压缩---------------------------------
+gulp.task(&apos;imagemin&apos;, function(){
+    return gulp.src(config.src)
+        .pipe(cache(imagemin()))
+        .pipe(gulp.dest(config.dist));
+});
+
+// Lint Task---------------------------------
+gulp.task(&apos;lint&apos;, function() {
+    return gulp.src(&apos;js/*.js&apos;)
+        .pipe(jshint())
+        .pipe(jshint.reporter(&apos;default&apos;));
+});
+
+
+// Less To Css
+gulp.task(&apos;less&apos;, function() {
+    return gulp.src(&apos;v2.0/**/**/*.less&apos;)
+        .pipe(plumber())
+        .pipe(less())
+        .pipe(autoprefixer({browsers: [&apos;last 2 versions&apos;], cascade: false }))
+        .on(&apos;error&apos;,function(e){console.log(e)})
+        .pipe(gulp.dest(&apos;v2.0&apos;))
+        .pipe(cssmin({compatibility : &apos;ie8&apos;, noAdvanced : true }))
+        .pipe(gulp.dest(&apos;dist&apos;));
+});
+
+// Less To Css
+gulp.task(&apos;less-p&apos;, function() {
+    return gulp.src(&apos;p/**/**/*.less&apos;)
+        .pipe(less())
+        .pipe(autoprefixer({browsers: [&apos;last 2 versions&apos;], cascade: false }))
+        .pipe(cssmin({compatibility : &apos;ie8&apos;, noAdvanced : true }))
+        .pipe(gulp.dest(&apos;p&apos;))
+});
+
+// Copy &amp;&amp; Minify Css
+gulp.task(&apos;css&apos;, function() {
+    return gulp.src(&apos;v2.0/**/**/*.css&apos;)
+        .pipe(cssmin())
+        .pipe(gulp.dest(&apos;dist&apos;));
+});
+
+
+
+// Copy &amp;&amp; Minify html
+gulp.task(&apos;html&apos;, function() {
+    return gulp.src(&apos;v2.0/**/**/*.html&apos;)
+        .pipe(gulp.dest(&apos;dist&apos;));
+});
+
+// Converts Markdown to HTML
+gulp.task(&apos;markdown&apos;, function () {
+    return gulp.src(&apos;*.md&apos;)
+        .pipe(markdown())
+        .pipe(gulp.dest(&apos;md&apos;));
+});
+
+// Concatenate &amp;&amp; Minify JS
+gulp.task(&apos;theme&apos;, function() {
+    return gulp.src([&apos;theme/**/**/*.js&apos;])
+        .pipe(plumber()) //plumber给pipe打补丁
+        .pipe(uglify()) // 压缩js
+        .pipe(gulp.dest(&apos;dist/theme&apos;)); // 移动到文件夹下
+});
+
+
+// Concatenate &amp;&amp; Minify JS
+gulp.task(&apos;scripts&apos;, function() {
+    return gulp.src([&apos;v2.0/**/*.js&apos;,&apos;v2.0/**/*.tpl.js&apos;,&apos;p/**/*.js&apos;,&apos;p/**/*.tpl.js&apos;])
+        .pipe(plumber()) //plumber给pipe打补丁
+        .pipe(uglify()) // 压缩js
+        .pipe(gulp.dest(&apos;dist&apos;)); // 移动到文件夹下
+});
+
+// jst
+gulp.task(&apos;jst&apos;, function() {
+    return gulp.src(&apos;v2.0/**/**/*.tpl.html&apos;)
+        .pipe(tpl2js({type: &apos;amd&apos;, modBase: &apos;.&apos;}))
+        .pipe(gulp.dest(function(file) {
+            var hist = file.history[0].replace(/(\\)/g,&apos;/&apos;),
+                sp = hist.split(/\/(?![^\/]*\/)/)[0],
+                pt = sp.split(&quot;v2.0&quot;)[1];
+                pt = pt.split(&quot;.html&quot;)[0];
+                console.log(sp);
+          return &quot;v2.0&quot;+pt;
+        }))
+        .pipe(gulp.dest(function(file) {
+            var hist = file.history[0].replace(/(\\)/g,&apos;/&apos;),
+                sp = hist.split(/\/(?![^\/]*\/)/)[0],
+                pt = sp.split(&quot;v2.0&quot;)[1];
+          return &quot;dist&quot;+pt;
+        }));
+});
+
+// jst
+gulp.task(&apos;jst-p&apos;, function() {
+    return gulp.src(&apos;p/hotspot/comment/*.tpl.html&apos;)
+        .pipe(tpl2js({type: &apos;amd&apos;,modBase: &apos;comment&apos;}))
+        .pipe(gulp.dest(function(file) {
+            var hist = file.history[0].replace(/(\\)/g,&apos;/&apos;),
+                sp = hist.split(/\/(?![^\/]*\/)/)[0],
+                pt = sp.split(&quot;p/hotspot&quot;)[1];
+                console.log(sp);
+          return &quot;p/hotspot&quot;+pt;
+        }))
+        .pipe(gulp.dest(function(file) {
+            var hist = file.history[0].replace(/(\\)/g,&apos;/&apos;),
+                sp = hist.split(/\/(?![^\/]*\/)/)[0],
+                pt = sp.split(&quot;v2.0&quot;)[1];
+          return &quot;dist&quot;+pt;
+        }));
+});
+
+
+
+
+//web server
+gulp.task(&apos;server&apos;, function() {
+    gulp.src(&apos;./&apos;) // 服务器目录（./代表根目录）
+        .pipe(webserver({ // 运行gulp-webserver
+            livereload: true, // 启用LiveReload
+            port: 8080,
+            open: true // 服务器启动时自动打开网页
+        }));
+});
+
+
+// Watch Files For Changes
+gulp.task(&apos;watch&apos;, function() {
+    gulp.watch(&apos;p/**/**/*.less&apos;, [&apos;less-p&apos;]);
+    gulp.watch(&apos;v2.0/**/**/*.less&apos;, [&apos;less&apos;]);
+    gulp.watch([&apos;v2.0/**/**/*.js&apos;,&apos;!v2.0/**/**/*.tpl.js&apos;], [&apos;scripts&apos;]);
+    gulp.watch(&apos;v2.0/**/**/*.html&apos;, [&apos;jst&apos;]);
+    gulp.watch(&apos;theme/**/**/*.js&apos;, [&apos;theme&apos;]);
+
+    // livereload.listen();
+
+});
+
+// Default Task
+gulp.task(&apos;default&apos;, [&apos;less&apos;,&apos;jst&apos;,&apos;scripts&apos;,&apos;imagemin&apos;, &apos;css&apos;,&apos;theme&apos;,&apos;watch&apos;]);
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/gulp/" rel="tag"># gulp</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/28/2016-04-25-gulp/" rel="next" title="gulp的一些总结">
+                <i class="fa fa-chevron-left"></i> gulp的一些总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/08/2017-05-08-heroku/" rel="prev" title="发布一个heroku项目。">
+                发布一个heroku项目。 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="飞来小侠" />
+          <p class="site-author-name" itemprop="name">飞来小侠</p>
+           
+              <p class="site-description motion-element" itemprop="description">依法不依人，依义不依语。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/flyingliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5872146656" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/guolaiwan/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liu-fei-lai/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">飞来小侠</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Pisces
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://ananfo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://flyingliu.github.io/2016/09/28/2016-07-02-gulp-config/';
+          this.page.identifier = '2016/09/28/2016-07-02-gulp-config/';
+          this.page.title = 'gulp的配置文件';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ananfo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

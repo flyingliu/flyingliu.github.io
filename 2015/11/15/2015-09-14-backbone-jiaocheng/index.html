@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="backbone," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="因为最近的工作中使用到了backbone.js框架，所以在网上找了些资料，但是关于这个框架的中文资料实在是太少了，没有办法，只好自己翻译了壹篇简单的入门教材。如果翻译得不好，请大家口下留情。另外，大家也可以签出 Agility.js 的代码，它也是壹个用于替代Backbone.js的壹个简单框架。 这是壹个简单的 Backbone.js 教程，由不言自明的”Hello World”到日益复杂的例子">
+<meta name="keywords" content="backbone">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Backbone.js 简易入门教程">
+<meta property="og:url" content="http://flyingliu.github.io/2015/11/15/2015-09-14-backbone-jiaocheng/index.html">
+<meta property="og:site_name" content="如是我闻">
+<meta property="og:description" content="因为最近的工作中使用到了backbone.js框架，所以在网上找了些资料，但是关于这个框架的中文资料实在是太少了，没有办法，只好自己翻译了壹篇简单的入门教材。如果翻译得不好，请大家口下留情。另外，大家也可以签出 Agility.js 的代码，它也是壹个用于替代Backbone.js的壹个简单框架。 这是壹个简单的 Backbone.js 教程，由不言自明的”Hello World”到日益复杂的例子">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-29T00:12:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Backbone.js 简易入门教程">
+<meta name="twitter:description" content="因为最近的工作中使用到了backbone.js框架，所以在网上找了些资料，但是关于这个框架的中文资料实在是太少了，没有办法，只好自己翻译了壹篇简单的入门教材。如果翻译得不好，请大家口下留情。另外，大家也可以签出 Agility.js 的代码，它也是壹个用于替代Backbone.js的壹个简单框架。 这是壹个简单的 Backbone.js 教程，由不言自明的”Hello World”到日益复杂的例子">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://flyingliu.github.io/2015/11/15/2015-09-14-backbone-jiaocheng/"/>
+
+
+
+
+
+  <title>Backbone.js 简易入门教程 | 如是我闻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">如是我闻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">色即是空，空即是色</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://flyingliu.github.io/2015/11/15/2015-09-14-backbone-jiaocheng/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="飞来小侠">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="如是我闻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Backbone.js 简易入门教程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-15T16:37:02+08:00">
+                2015-11-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/11/15/2015-09-14-backbone-jiaocheng/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/11/15/2015-09-14-backbone-jiaocheng/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>因为最近的工作中使用到了backbone.js框架，所以在网上找了些资料，但是关于这个框架的中文资料实在是太少了，没有办法，只好自己翻译了壹篇简单的入门教材。如果翻译得不好，请大家口下留情。另外，大家也可以签出 <a href="http://agilityjs.com/" target="_blank" rel="external">Agility.js</a> 的代码，它也是壹个用于替代Backbone.js的壹个简单框架。</p>
+<p>这是壹个简单的 Backbone.js 教程，由不言自明的”Hello World”到日益复杂的例子组成，它的出现是为了提供壹个平滑的从零过渡到流行的 Todos样例。<br>Backbone.js提供了壹个简化的用于组织你的Javascript应用的MVC框架。目的是为了得到更加容易维护的代码，通过解开那些富客户端应用中类似“意大利面条”式，在DOM的不同部分和后端服务器中的回调绑定。<br>教程开始于最小化的视图(View)对象，并且逐步的介绍事件绑定、事件处理、模型与集合。壹旦进入教程，可以使用右上角的导航菜单来查看其它例子。例子的序号按照其复杂程度递增。</p>
+<p>下面的代码是基于HTML5的页面，最好使用最新版本的Firefox/Chrome/Opera/Safari浏览，不要用IE浏览器，你懂的。</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+ &lt;html&gt;
+ &lt;head&gt;
+   &lt;meta charset=&quot;utf-8&quot;&gt;
+   &lt;title&gt;hello-backbonejs&lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+   &lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;http://ajax.cdnjs.com/ajax/libs/underscore.js/1.1.6/underscore-min.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;http://ajax.cdnjs.com/ajax/libs/backbone.js/0.3.3/backbone-min.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;...number.js...&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+ &lt;/body&gt;
+ &lt;/html&gt;
+</code></pre><h1 id="1-js-本例说明最小化的视图的声明与实例化。效果演示看这里。"><a href="#1-js-本例说明最小化的视图的声明与实例化。效果演示看这里。" class="headerlink" title="1.js  本例说明最小化的视图的声明与实例化。效果演示看这里。"></a>1.js  本例说明最小化的视图的声明与实例化。效果演示看<a href="/src/demos/hello.html">这里</a>。</h1><p>ListView类：是我们的主要的应用视图。</p>
+<p>initialize()：自动调用上述实例，你可以在这里做除了界面元素事件以外的所有类型的绑定，比如说单击事件等等。</p>
+<p>render()：用于渲染整个视图的函数。this.el：需要用户手动调用。</p>
+<p>listView实例：实例化整个视图。</p>
+<pre><code>(function($){
+//自运行的闭包
+  var ListView = Backbone.View.extend({
+    el: $(&apos;body&apos;), // attaches `this.el` to an existing element.
+    initialize: function(){
+      _.bindAll(this, &apos;render&apos;); // fixes loss of context for &apos;this&apos; within methods
+       this.render(); // not all views are self-rendering. This one is.
+    },
+    render: function(){
+      $(this.el).append(&quot;&lt;ul&gt; &lt;li&gt;hello world&lt;/li&gt; &lt;/ul&gt;&quot;);
+    }
+  });
+  var listView = new ListView();
+})(jQuery);
+</code></pre><h1 id="2-js-本例说明如何绑定DOM事件到视图的方法中。效果演示看这里。"><a href="#2-js-本例说明如何绑定DOM事件到视图的方法中。效果演示看这里。" class="headerlink" title="2.js  本例说明如何绑定DOM事件到视图的方法中。效果演示看这里。"></a>2.js  本例说明如何绑定DOM事件到视图的方法中。效果演示看<a href="/src/demos/hello2.html">这里</a>。</h1><p>events：DOM事件绑定到视图方法中，Backbone没有独立的控制器来处理这种绑定，它们全部发生在视图层中。</p>
+<p>render()：正在展示如何将壹个按钮来添加到新的list条目中。</p>
+<p>addItem()：通过上述点击事件自动触发的自定义的函数。</p>
+<pre><code>(function($){
+  var ListView = Backbone.View.extend({
+    el: $(&apos;#mydiv&apos;), // el attaches to existing element
+    events: {
+      &apos;click button#add&apos;: &apos;addItem&apos;
+    },
+    initialize: function(){
+      _.bindAll(this, &apos;render&apos;, &apos;addItem&apos;); // every function that uses &apos;this&apos; as the current object should be in here
+      this.counter = 0; // total number of items added thus far
+      this.render();
+    },
+    render: function(){
+      $(this.el).append(&quot;&lt;button id=&apos;add&apos;&gt;Add list item&lt;/button&gt;&quot;);
+      $(this.el).append(&quot;&lt;ul&gt;&lt;/ul&gt;&quot;);
+    },
+    addItem: function(){
+      this.counter++;
+      $(&apos;ul&apos;, this.el).append(&quot;&lt;li&gt;hello world&quot;+this.counter+&quot;&lt;/li&gt;&quot;);
+    }
+  });
+  var listView = new ListView();
+})(jQuery);
+</code></pre><h1 id="3-js-这个样例说明如何使用模型中的集合来存储数据，以及如何将数据的改变绑定到视图。演示效果看这里。"><a href="#3-js-这个样例说明如何使用模型中的集合来存储数据，以及如何将数据的改变绑定到视图。演示效果看这里。" class="headerlink" title="3.js  这个样例说明如何使用模型中的集合来存储数据，以及如何将数据的改变绑定到视图。演示效果看这里。"></a>3.js  这个样例说明如何使用模型中的集合来存储数据，以及如何将数据的改变绑定到视图。演示效果看<a href="/src/demos/hello3.html">这里</a>。</h1><p>Item 类：模型层的原子（最小）部分。壹个模型是壹个基本的Javascript对象，例如：键值对，以及壹些用于事件响应、数据持久化的帮助函数等。</p>
+<p>List 类：壹个条目的集合。基本上是壹些模型对象的数组和壹些帮助函数。</p>
+<p>initialize() 正在实例化壹个集合，并且绑定它的添加事件到自己的方法 appendItem。（Backbone不在壹个单独的控制器中提供回调函数用于绑定）。</p>
+<p>Save 参考这个以便它能够访问下面的callback范围内的数据。</p>
+<p>addItem() 现在独立处理模型与视图。现在视图更新被授予下面的事件监听器 appendItem()。</p>
+<p>appendItem() 被集合事件add触发，可视化的处理更新。</p>
+<pre><code>(function($){
+
+  var Item = Backbone.Model.extend({
+    defaults: {
+      part1: &apos;hello&apos;,
+      part2: &apos;world&apos;
+    }
+  });
+
+  var List = Backbone.Collection.extend({
+    model: Item
+  });
+
+  var ListView = Backbone.View.extend({
+    el: $(&apos;body&apos;),
+    events: {
+      &apos;click button#add&apos;: &apos;addItem&apos;
+    },
+
+    initialize: function(){
+      _.bindAll(this, &apos;render&apos;, &apos;addItem&apos;, &apos;appendItem&apos;); // remember: every function that uses &apos;this&apos; as the current object should be in here
+
+      this.collection = new List();
+      this.collection.bind(&apos;add&apos;, this.appendItem); // collection event binder
+
+      this.counter = 0;
+      this.render();
+    },
+    render: function(){
+
+      var self = this;
+      $(this.el).append(&quot;&lt;button id=&apos;add&apos;&gt;Add list item&lt;/button&gt;&quot;);
+      $(this.el).append(&quot;&lt;ul&gt;&lt;/ul&gt;&quot;);
+      _(this.collection.models).each(function(item){ // in case collection is not empty
+        self.appendItem(item);
+      }, this);
+    },
+
+    addItem: function(){
+      this.counter++;
+      var item = new Item();
+      item.set({
+        part2: item.get(&apos;part2&apos;) + this.counter // modify item defaults
+      });
+      this.collection.add(item); // add item to collection; view is updated via event &apos;add&apos;
+    },
+
+    appendItem: function(item){
+      $(&apos;ul&apos;, this.el).append(&quot;&lt;li&gt;&quot;+item.get(&apos;part1&apos;)+&quot; &quot;+item.get(&apos;part2&apos;)+&quot;&lt;/li&gt;&quot;);
+    }
+  });
+
+  var listView = new ListView();
+})(jQuery);
+</code></pre><h1 id="4-js-这个样例说明如何渲染模型到专门查看的视图。演示效果看这里。"><a href="#4-js-这个样例说明如何渲染模型到专门查看的视图。演示效果看这里。" class="headerlink" title="4.js  这个样例说明如何渲染模型到专门查看的视图。演示效果看这里。"></a>4.js  这个样例说明如何渲染模型到专门查看的视图。演示效果看<a href="/src/demos/hello4.html">这里</a>。</h1><p>ItemView 类：负责渲染每个独立的条目。</p>
+<p>appendItem() 不再负责渲染独立的项目。它现在授予 render() 方法到每个独立的 ItemView 实例。</p>
+<pre><code>(function($){
+  var Item = Backbone.Model.extend({
+    defaults: {
+      part1: &apos;hello&apos;,
+      part2: &apos;world&apos;
+    }
+  });
+
+  var List = Backbone.Collection.extend({
+    model: Item
+  });
+
+  var ItemView = Backbone.View.extend({
+    tagName: &apos;li&apos;, // name of (orphan) root tag in this.el
+    initialize: function(){
+      _.bindAll(this, &apos;render&apos;); // every function that uses &apos;this&apos; as the current object should be in here
+    },
+    render: function(){
+      $(this.el).html(&apos;&lt;span&gt;&apos;+this.model.get(&apos;part1&apos;)+&apos; &apos;+this.model.get(&apos;part2&apos;)+&apos;&lt;/span&gt;&apos;);
+      return this; // for chainable calls, like .render().el
+    }
+  });
+
+  var ListView = Backbone.View.extend({
+    el: $(&apos;body&apos;), // el attaches to existing element
+    events: {
+      &apos;click button#add&apos;: &apos;addItem&apos;
+    },
+    initialize: function(){
+      _.bindAll(this, &apos;render&apos;, &apos;addItem&apos;, &apos;appendItem&apos;); // every function that uses &apos;this&apos; as the current object
+      this.collection = new List();
+      this.collection.bind(&apos;add&apos;, this.appendItem); // collection event binder
+
+      this.counter = 0;
+      this.render();
+    },
+    render: function(){
+      var self = this;
+      $(this.el).append(&quot;&lt;button id=&apos;add&apos;&gt;Add list item&lt;/button&gt;&quot;);
+      $(this.el).append(&quot;&lt;ul&gt;&lt;/ul&gt;&quot;);
+      _(this.collection.models).each(function(item){ // in case collection is not empty
+        self.appendItem(item);
+      }, this);
+    },
+    addItem: function(){
+      this.counter++;
+      var item = new Item();
+      item.set({
+        part2: item.get(&apos;part2&apos;) + this.counter // modify item defaults
+      });
+      this.collection.add(item);
+    },
+
+    appendItem: function(item){
+      var itemView = new ItemView({
+        model: item
+      });
+      $(&apos;ul&apos;, this.el).append(itemView.render().el);
+    }
+  });
+
+  var listView = new ListView();
+})(jQuery);
+</code></pre><h1 id="5-js-本例介绍两个新的模型动作（交换与删除）-说明这些动作应该如何在模型的视图中被处理。演示效果看这里。"><a href="#5-js-本例介绍两个新的模型动作（交换与删除）-说明这些动作应该如何在模型的视图中被处理。演示效果看这里。" class="headerlink" title="5.js  本例介绍两个新的模型动作（交换与删除） 说明这些动作应该如何在模型的视图中被处理。演示效果看这里。"></a>5.js  本例介绍两个新的模型动作（交换与删除） 说明这些动作应该如何在模型的视图中被处理。演示效果看<a href="/src/demos/hello5.html">这里</a>。</h1><p>Backbone.sync：使用匿名函数重载持久化存储。这个属性允许在不抛出异常信息的前提下使用 Model.destroy()。</p>
+<p>ItemViews 对于每个条目响应两个点击动作，交换与删除。</p>
+<p>initialize() 绑定模型更改与删除到适当的事件。</p>
+<p>render() 包含两个额外的span以响应交换与删除事件。</p>
+<p>unrender()：让模型从DOM中移除它自己。</p>
+<p>swap() 会在内部交换条目的属性，当.set()模型函数被调用，事务更新将会被触发。</p>
+<p>remove()：我们使用destroy()方法从集合中移除模型。通常这也会从持久存储中删除记录，但是我们重载了它（参考以上例子）。</p>
+<pre><code>(function($){
+
+  Backbone.sync = function(method, model, success, error){
+    success();
+  }
+  var Item = Backbone.Model.extend({
+    defaults: {
+      part1: &apos;hello&apos;,
+      part2: &apos;world&apos;
+    }
+  });
+
+  var List = Backbone.Collection.extend({
+    model: Item
+  });
+
+  var ItemView = Backbone.View.extend({
+    tagName: &apos;li&apos;, // name of tag to be created
+
+    events: {
+      &apos;click span.swap&apos;:  &apos;swap&apos;,
+      &apos;click span.delete&apos;: &apos;remove&apos;
+    },
+
+    initialize: function(){
+      _.bindAll(this, &apos;render&apos;, &apos;unrender&apos;, &apos;swap&apos;, &apos;remove&apos;); // every function that uses &apos;this&apos; as the current object should be in here
+
+      this.model.bind(&apos;change&apos;, this.render);
+      this.model.bind(&apos;remove&apos;, this.unrender);
+    },
+
+    render: function(){
+      $(this.el).html(&apos;&lt;span style=&quot;color:black;&quot;&gt;&apos;+this.model.get(&apos;part1&apos;)+&apos; &apos;+this.model.get(&apos;part2&apos;)+&apos;&lt;/span&gt; &amp;nbsp; &amp;nbsp; &lt;span class=&quot;swap&quot; style=&quot;color:blue;&quot;&gt;[swap]&lt;/span&gt; &lt;span class=&quot;delete&quot; style=&quot;color:red;&quot;&gt;[delete]&lt;/span&gt;&apos;);
+      return this; // for chainable calls, like .render().el
+    },
+
+    unrender: function(){
+      $(this.el).remove();
+    },
+
+    swap: function(){
+      var swapped = {
+        part1: this.model.get(&apos;part2&apos;),
+        part2: this.model.get(&apos;part1&apos;)
+      };
+      this.model.set(swapped);
+    },
+
+    remove: function(){
+      this.model.destroy();
+    }
+  });
+
+  var ListView = Backbone.View.extend({
+    el: $(&apos;body&apos;), // el attaches to existing element
+    events: {
+      &apos;click button#add&apos;: &apos;addItem&apos;
+    },
+    initialize: function(){
+      _.bindAll(this, &apos;render&apos;, &apos;addItem&apos;, &apos;appendItem&apos;); // every function that uses &apos;this&apos; as the current object should be in here
+
+      this.collection = new List();
+      this.collection.bind(&apos;add&apos;, this.appendItem); // collection event binder
+
+      this.counter = 0;
+      this.render();
+    },
+    render: function(){
+      var self = this;
+      $(this.el).append(&quot;&lt;button id=&apos;add&apos;&gt;Add list item&lt;/button&gt;&quot;);
+      $(this.el).append(&quot;&lt;ul&gt;&lt;/ul&gt;&quot;);
+      _(this.collection.models).each(function(item){ // in case collection is not empty
+        self.appendItem(item);
+      }, this);
+    },
+    addItem: function(){
+      this.counter++;
+      var item = new Item();
+      item.set({
+        part2: item.get(&apos;part2&apos;) + this.counter // modify item defaults
+      });
+      this.collection.add(item);
+    },
+    appendItem: function(item){
+      var itemView = new ItemView({
+        model: item
+      });
+      $(&apos;ul&apos;, this.el).append(itemView.render().el);
+    }
+  });
+
+  var listView = new ListView();
+})(jQuery);
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/backbone/" rel="tag"># backbone</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/15/2015-09-15-the-view-of-backbone/" rel="next" title="Backbone中的View">
+                <i class="fa fa-chevron-left"></i> Backbone中的View
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/15/2015-09-15-jekyll-on-heroku/" rel="prev" title="在heroku上建立jekyll静态网站">
+                在heroku上建立jekyll静态网站 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="飞来小侠" />
+          <p class="site-author-name" itemprop="name">飞来小侠</p>
+           
+              <p class="site-description motion-element" itemprop="description">依法不依人，依义不依语。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/flyingliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5872146656" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/guolaiwan/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liu-fei-lai/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-js-本例说明最小化的视图的声明与实例化。效果演示看这里。"><span class="nav-number">1.</span> <span class="nav-text">1.js  本例说明最小化的视图的声明与实例化。效果演示看这里。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-js-本例说明如何绑定DOM事件到视图的方法中。效果演示看这里。"><span class="nav-number">2.</span> <span class="nav-text">2.js  本例说明如何绑定DOM事件到视图的方法中。效果演示看这里。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-js-这个样例说明如何使用模型中的集合来存储数据，以及如何将数据的改变绑定到视图。演示效果看这里。"><span class="nav-number">3.</span> <span class="nav-text">3.js  这个样例说明如何使用模型中的集合来存储数据，以及如何将数据的改变绑定到视图。演示效果看这里。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-js-这个样例说明如何渲染模型到专门查看的视图。演示效果看这里。"><span class="nav-number">4.</span> <span class="nav-text">4.js  这个样例说明如何渲染模型到专门查看的视图。演示效果看这里。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-js-本例介绍两个新的模型动作（交换与删除）-说明这些动作应该如何在模型的视图中被处理。演示效果看这里。"><span class="nav-number">5.</span> <span class="nav-text">5.js  本例介绍两个新的模型动作（交换与删除） 说明这些动作应该如何在模型的视图中被处理。演示效果看这里。</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">飞来小侠</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Pisces
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://ananfo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://flyingliu.github.io/2015/11/15/2015-09-14-backbone-jiaocheng/';
+          this.page.identifier = '2015/11/15/2015-09-14-backbone-jiaocheng/';
+          this.page.title = 'Backbone.js 简易入门教程';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ananfo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

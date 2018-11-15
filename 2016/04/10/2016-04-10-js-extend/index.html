@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="javascript," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="对象之间的继承有以下几个方法： 用call和apply(不推荐单独使用，定义在prototype中的属性和方法不能继承) prototype模式(注意prototype需要先继承后定义) 传统prototype模式(推荐，关键点是Child.prototype = new Parent.prototype以及重新改变Child.prototype.constructor) 利用空对象间接继承(只继">
+<meta name="keywords" content="javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解JS构造函数继承">
+<meta property="og:url" content="http://flyingliu.github.io/2016/04/10/2016-04-10-js-extend/index.html">
+<meta property="og:site_name" content="如是我闻">
+<meta property="og:description" content="对象之间的继承有以下几个方法： 用call和apply(不推荐单独使用，定义在prototype中的属性和方法不能继承) prototype模式(注意prototype需要先继承后定义) 传统prototype模式(推荐，关键点是Child.prototype = new Parent.prototype以及重新改变Child.prototype.constructor) 利用空对象间接继承(只继">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-29T00:15:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理解JS构造函数继承">
+<meta name="twitter:description" content="对象之间的继承有以下几个方法： 用call和apply(不推荐单独使用，定义在prototype中的属性和方法不能继承) prototype模式(注意prototype需要先继承后定义) 传统prototype模式(推荐，关键点是Child.prototype = new Parent.prototype以及重新改变Child.prototype.constructor) 利用空对象间接继承(只继">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://flyingliu.github.io/2016/04/10/2016-04-10-js-extend/"/>
+
+
+
+
+
+  <title>理解JS构造函数继承 | 如是我闻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">如是我闻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">色即是空，空即是色</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://flyingliu.github.io/2016/04/10/2016-04-10-js-extend/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="飞来小侠">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="如是我闻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">理解JS构造函数继承</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-10T21:02:41+08:00">
+                2016-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/04/10/2016-04-10-js-extend/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/04/10/2016-04-10-js-extend/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>对象之间的继承有以下几个方法：</p>
+<p>用call和apply(不推荐单独使用，定义在prototype中的属性和方法不能继承)</p>
+<p>prototype模式(注意prototype需要先继承后定义)</p>
+<p>传统prototype模式(推荐，关键点是<code>Child.prototype = new Parent.prototype</code>以及重新改变<code>Child.prototype.constructor</code>)</p>
+<p>利用空对象间接继承(只继承prototype中的属性，关键点在于利用一个空的构造函数当中介)</p>
+<p>拷贝继承(不推荐单独使用，for循环逐一拷贝)</p>
+<p>以上推荐使用传统prototype模式以及call和apply与拷贝继承相配合的模式</p>
+<h5 id="用call和apply"><a href="#用call和apply" class="headerlink" title="用call和apply"></a>用call和apply</h5><pre><code>function Chinese() {
+    this.nationality = &quot;Chinese&quot;;
+}
+function Person(name, age) {
+    Chinese.apply(this); //这里改变了Chinese中this的指向
+    this.name = name;
+    this.age = age;
+}
+var p1 = new Person(&quot;Oli&quot;, 18);
+console.log(p1.nationality); //Chinese
+</code></pre><h5 id="传统prototype模式"><a href="#传统prototype模式" class="headerlink" title="传统prototype模式"></a>传统prototype模式</h5><pre><code>function Chinese() {
+    this.nationality = &quot;Chinese&quot;;
+}
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+Person.prototype = new Chinese(); //这里因为在prototype中使用了new，则会指向Chinese
+console.log(Person.prototype.constructor); //Chinese(){}
+Person.prototype.constructor = Person; //这里需要把constructor构造函数重新改为Person
+console.log(Person.prototype.constructor); //Person(){}
+var p1 = new Person(&quot;Oli&quot;, 18);
+console.log(p1.nationality); //Chinese
+</code></pre><p>需要注意的是：在继承中，如果替换了prototype，那么新的prototype必须修改constructor属性，将这个属性指回到原来的构造函数。</p>
+<h5 id="利用空对象间接继承"><a href="#利用空对象间接继承" class="headerlink" title="利用空对象间接继承"></a>利用空对象间接继承</h5><pre><code>function Chinese() {}
+Chinese.prototype.nationality = &quot;Chinese&quot;;
+
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+function F(){}; //空对象几乎不占用内存
+F.prototype = Chinese.prototype;
+Person.prototype = new F();
+Person.prototype.constructor = Person;
+
+Person.prototype.sayName = function() { //Person的prototype中的方法和属性需要在继承之后定义
+    console.log(this.name);
+};
+
+var p1 = new Person(&quot;Oli&quot;, 18);
+console.log(p1.nationality); //Chinese
+p1.sayName(); //Oli
+</code></pre><h5 id="可以将该方法定义为函数："><a href="#可以将该方法定义为函数：" class="headerlink" title="可以将该方法定义为函数："></a>可以将该方法定义为函数：</h5><pre><code>function extend(Child, Parent) {
+    var F = function() {};
+    F.prototype = Parent.prototype;
+    Child.prototype = new F();
+    Child.prototype.constructor = Child;
+    Child.uber = Parent.prototype; //用于访问父对象的prototype，可用可不用
+}
+</code></pre><p>举例：</p>
+<pre><code>function extend(Child, Parent) {
+    var F = function() {};
+    F.prototype = Parent.prototype;
+    Child.prototype = new F();
+    Child.prototype.constructor = Child;
+    Child.uber = Parent.prototype;
+}
+
+function Chinese() {}
+Chinese.prototype.nationality = &quot;Chinese&quot;;
+
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+extend(Person, Chinese);
+
+Person.prototype.sayName = function() {
+    console.log(this.name);
+};
+
+var p1 = new Person(&quot;Oli&quot;, 18);
+console.log(p1.nationality); //Chinese
+p1.sayName(); //Oli
+</code></pre><h5 id="拷贝继承"><a href="#拷贝继承" class="headerlink" title="拷贝继承"></a>拷贝继承</h5><p>使用下面的函数逐一将prototype的属性和函数拷贝到对象中：</p>
+<pre><code>function extend(Child, Parent) {　　　　
+    var p = Parent.prototype;　　　　
+    var c = Child.prototype;　　　　
+    for (var i in p) {　　　　　　
+        c[i] = p[i];　　　　　　
+    }　　　　
+    c.uber = p;　　
+}
+</code></pre><h5 id="不需要先继承后定义"><a href="#不需要先继承后定义" class="headerlink" title="不需要先继承后定义"></a>不需要先继承后定义</h5><p>传统prototype模式继承（例子）</p>
+<pre><code>function Parent() {
+    this.name = &quot;thisIsName&quot;;
+}
+Parent.prototype.sayName = function() {
+    return this.name;
+};
+
+function Child() {
+    this.age = &quot;thisIsAge&quot;;
+}
+
+Child.prototype = new Parent();
+Child.prototype.constructor = Child;
+
+Child.prototype.sayAge = function() {
+    return this.age;
+};
+
+var c = new Child();
+console.log(c.name);
+console.log(c.age);
+console.log(c.sayName());
+console.log(c.sayAge());
+</code></pre><h5 id="call和apply与拷贝继承相配合（例子）"><a href="#call和apply与拷贝继承相配合（例子）" class="headerlink" title="call和apply与拷贝继承相配合（例子）"></a>call和apply与拷贝继承相配合（例子）</h5><pre><code>function extend(C, P) {
+    var p = P.prototype;
+    var c = C.prototype;
+    for(var i in p){
+        c[i] = p[i];
+    }
+    c.uber = p;
+}
+
+function Parent() {
+    this.name = &quot;thisIsName&quot;;
+}
+Parent.prototype.sayName = function() {
+    return this.name;
+};
+
+function Child() {
+    Parent.apply(this); //继承构造函数内的属性和方法
+    this.age = &quot;thisIsAge&quot;;
+}
+
+Child.prototype.sayAge = function() {
+    return this.age;
+};
+
+extend(Child, Parent); //不需要先继承后定义
+
+var c = new Child();
+console.log(c.name);
+console.log(c.age);
+console.log(c.sayName());
+console.log(c.sayAge());
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/10/2016-04-10-js-jicheng/" rel="next" title="JavaScript 继承方式的概念">
+                <i class="fa fa-chevron-left"></i> JavaScript 继承方式的概念
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/28/2016-04-25-gulp/" rel="prev" title="gulp的一些总结">
+                gulp的一些总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="飞来小侠" />
+          <p class="site-author-name" itemprop="name">飞来小侠</p>
+           
+              <p class="site-description motion-element" itemprop="description">依法不依人，依义不依语。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/flyingliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5872146656" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/guolaiwan/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liu-fei-lai/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#用call和apply"><span class="nav-number">1.</span> <span class="nav-text">用call和apply</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#传统prototype模式"><span class="nav-number">2.</span> <span class="nav-text">传统prototype模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#利用空对象间接继承"><span class="nav-number">3.</span> <span class="nav-text">利用空对象间接继承</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#可以将该方法定义为函数："><span class="nav-number">4.</span> <span class="nav-text">可以将该方法定义为函数：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#拷贝继承"><span class="nav-number">5.</span> <span class="nav-text">拷贝继承</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#不需要先继承后定义"><span class="nav-number">6.</span> <span class="nav-text">不需要先继承后定义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#call和apply与拷贝继承相配合（例子）"><span class="nav-number">7.</span> <span class="nav-text">call和apply与拷贝继承相配合（例子）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">飞来小侠</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Pisces
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://ananfo.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://flyingliu.github.io/2016/04/10/2016-04-10-js-extend/';
+          this.page.identifier = '2016/04/10/2016-04-10-js-extend/';
+          this.page.title = '理解JS构造函数继承';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ananfo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
